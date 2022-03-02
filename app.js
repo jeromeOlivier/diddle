@@ -1,11 +1,13 @@
-'use strict'
+'use strict';
 
-document.addEventListener('DOMContentLoaded', () => {
-  import {words} from './modules/words.js';
-  import * as filter from './modules/filters.js';
-  // import * as draw from './modules/draw.js';
+import {words} from "./modules/words.js";
+import * as filter from "./modules/filters.js";
+import * as draw from "./modules/draw.js";
+import * as generate from './modules/generators.js';
 
-  // draw.generateGrid();
+document.addEventListener('DOMContentLoaded', (event) => {
+
+  draw.generateGrid();
 
   // const absent = document.querySelectorAll('.absent');
   // const correct = document.querySelectorAll('.correct');
@@ -13,17 +15,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // const absentSet = ['a', 't', 'i', 'o', 'b', 'l'];
   // const correctSet = ['r', '.', '.', 'e', '.'];
-  // const presentSet = {'e': 1, 'p': 4};
+  // const presentSet = {'e': 1,};
+  // const duplicates = [{true: 'e'}];
 
-  const absentSet = ['p', 'l'];
-  const correctSet = ['.', 'o', '.', '.', 's'];
-  const presentSet = {};
+  // const absentSet = ['p', 'l'];
+  // const correctSet = ['.', 'o', '.', '.', 's'];
+  // const presentSet = {};
+  // const duplicates = [{false: 'o'}];
+
+  const absentSet = ['r', 'i', 'o', 'b', 'l', 'e', 'p', 'h'];
+  const correctSet = ['.', 'a', 's', 't', 'y'];
+  const presentSet = [{'t': 2}, {'t': 0}];
+  const duplicates = [{}];
 
   // const invalidLetters = 0;
   // const validPositions = 0;
   // const validLetters = 0;
   // const invalidPositions = 0
-  const duplicates = [{false: 'o'}];
 
   // remove all words containing grey letters
   const first = filter.absentLetters(words, absentSet);
@@ -34,10 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // remove all words that have letters at yellow positions
   const fourth = filter.wrongPositions(third, presentSet);
 
-  const fifth = filter.duplicateLetters(fourth, duplicates);
+  // const fifth = filter.duplicateLetters(fourth, duplicates);
 
-  console.log(fifth);
-})
+  console.log(fourth);
+});
 
 
 // const indexes = makeArrayOf(30);

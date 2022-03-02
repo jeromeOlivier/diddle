@@ -1,4 +1,6 @@
 // remove all words with any of the following letters
+import * as generate from './generators.js';
+
 function absentLetters(words, letters) {
   const greySet = new Set();
   const greyRule = new RegExp("[" + letters.join("") + "]");
@@ -16,11 +18,14 @@ function correctLetters(words, letters) {
 
 // exclude all words with any of the  letters
 function presentLetters(words, letters) {
-  const literals = [];
-  Object.keys(letters).forEach(letter => literals.push(`(?=.*${letter})`));
-  if (literals.length) {
-    const rules = new RegExp(literals.join(""));
-    const newSet = new Set();
+  const literals = new Set();
+  letters.forEach(letter => Object.keys(letter).forEach(ltr => literals.add(`(?=.*${ltr})`)));
+
+  const array = Array.from(literals)
+  const rules = new RegExp(array.join(""));
+  const newSet = new Set();
+
+  if (array.length) {
     words.forEach(word => rules.test(word) && newSet.add(word));
     return Array.from(newSet);
   } else {
@@ -32,19 +37,25 @@ function presentLetters(words, letters) {
 function wrongPositions(words, letters) {
   const rules = new Set();
   // generate set of rules
-  Object.keys(letters).forEach(key => {
-    const string = ['.', '.', '.', '.', '.'];
-    string[letters[key]] = key;
-    const rule = new RegExp(string.join(''));
-    rules.add(rule);
+  letters.forEach(letter => {
+    console.log(letter);
+    Object.keys(letter).forEach(key => {
+      const regex = generate.arrayOfFillers(5, '.');
+      regex[letter[key]] = key;
+      const rule = new RegExp(regex.join(''));
+      console.log(rule);
+      rules.add(rule);
+    })
   });
   // compare array of words to set of rules, add matches to array of badWords
   const badWords = new Set();
   words.forEach(word => rules.forEach(rule => rule.test(word) && badWords.add(word)));
-  // if not badWord, add to goodWords
+
   const goodWords = new Set();
+  // if not badWord, add to goodWords
   words.forEach(word => !badWords.has(word) && goodWords.add(word));
-  return goodWords;
+
+  return Array.from(goodWords);
 }
 
 // exclude or include duplicate letters (2 or more) at any position
@@ -56,9 +67,10 @@ function duplicateLetters(words, conditions) {
       const boolean = Object.keys(condition)[0]; // TODO: refactor this?
       const regex = `[${letter}]{2,}`;
       const rule = new RegExp(regex);
-      // if word has more than one instance of condition's value, add to array
       if (boolean === 'true') {
+        // if word has more than one instance of condition's value, add to array
         words.forEach(word => rule.test(word) && setOfWords.add(word));
+      } else {
         // if word DOES NOT contain more than one instance, add to array;
         words.forEach(word => !rule.test(word) && setOfWords.add(word));
       }
