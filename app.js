@@ -23,9 +23,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
   // const presentSet = {};
   // const duplicates = [{false: 'o'}];
 
-  const absentSet = ['r', 'i', 'o', 'b', 'l', 'e', 'p', 'h'];
-  const correctSet = ['.', 'a', 's', 't', 'y'];
-  const presentSet = [{'t': 2}, {'t': 0}];
+  // const absentSet = ['r', 'i', 'o', 'b', 'l', 'e', 'p', 'h'];
+  // const correctSet = ['.', 'a', 's', 't', 'y'];
+  // const presentSet = [{'t': 2}, {'t': 0}];
+  // const duplicates = [{}];
+
+  const absentSet = ['a', 't', 'o', 'p', 'm', 's', 'n', 'f', 'b'];
+  const correctSet = ['.', 'i', '.', 'e', 'r'];
+  const presentSet = [{'r': 0}, {'i': 3}, {'r': 1}, {'i': 2}, {'e': 4}, {'r':2}];
   const duplicates = [{}];
 
   // const invalidLetters = 0;

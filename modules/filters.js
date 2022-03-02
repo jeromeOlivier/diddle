@@ -38,18 +38,17 @@ function wrongPositions(words, letters) {
   const rules = new Set();
   // generate set of rules
   letters.forEach(letter => {
-    console.log(letter);
     Object.keys(letter).forEach(key => {
       const regex = generate.arrayOfFillers(5, '.');
       regex[letter[key]] = key;
       const rule = new RegExp(regex.join(''));
-      console.log(rule);
       rules.add(rule);
     })
   });
   // compare array of words to set of rules, add matches to array of badWords
   const badWords = new Set();
   words.forEach(word => rules.forEach(rule => rule.test(word) && badWords.add(word)));
+  // words.forEach(word => rules.forEach(rule => rule.test(word) && console.log(word)));
 
   const goodWords = new Set();
   // if not badWord, add to goodWords

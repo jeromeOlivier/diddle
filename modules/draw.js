@@ -7,8 +7,6 @@ const words = document.querySelector('#words');
 function generateGrid() {
   const rows = generate.arrayOfNumbers(6)
   const cols = generate.arrayOfNumbers(5);
-  console.log(rows);
-  console.log(cols);
   rows.forEach(row => {
     const thisRow = document.createElement('div')
     thisRow.id = `row${row}`;
