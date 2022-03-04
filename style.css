@@ -1,13 +1,124 @@
-body {
+* {
     margin: 0;
     padding: 0;
-    background-color: #212121;
+}
+
+body {
+    background-color: #111;
+    color: #ddd;
+    font-size: 1rem;
+    font-family: "Helvetica", "Arial", sans-serif;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    flex-direction: column;
+}
+
+#container {
+    /*background-color: red;*/
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 100vw;
+    max-width: 500px;
+    min-width: 500px;
 }
 
 .title {
     display: flex;
+    font-size: 3rem;
     justify-content: center;
-    padding: 1rem;
-    color: #fff;
+    margin: 1rem;
 }
 
+#words {
+    height: 500px;
+    padding: 1rem;
+}
+
+.square {
+    border: 1px solid #444;
+    width: 7vh;
+    height: 7vh;
+    margin: .5vh;
+    font-size: 3rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    cursor: pointer;
+}
+
+.green {
+    background-color: #3a9c3a;
+}
+
+.grey {
+    background-color: #777474;
+}
+
+.yellow {
+    background-color: #a6a62b;
+}
+
+.row {
+    display: flex;
+    width: 100vw;
+    justify-content: center;
+}
+
+#keyboard {
+    margin: 1rem;
+}
+
+.kb-row {
+    display: flex;
+    touch-action: manipulation;
+}
+
+.kb-row button {
+    align-items: center;
+    background-color: #777;
+    border: 2px solid #888;
+    border-radius: 5px;
+    color: #ddd;
+    cursor: pointer;
+    display: flex;
+    flex-grow: 1;
+    font-size: 1rem;
+    font-weight: bold;
+    height: 50px;
+    width: 50px;
+    justify-content: center;
+    margin: .2rem;
+    padding: 0;
+    text-transform: uppercase;
+    user-select: none;
+}
+
+button[data-key='single'] {
+    background-color: #222;
+    border: 2px solid #333;
+    width: 10px;
+    visibility: hidden;
+}
+
+button[data-key='double'] {
+    background-color: #222;
+    border: 2px solid #333;
+    flex-grow: 30;
+    /*visibility: hidden;*/
+}
+
+button[data-key='enter'] {
+    background-color: #444;
+    width: 100px;
+}
+
+button[data-key='del'] {
+    background-color: #444;
+    width: 60px;
+}

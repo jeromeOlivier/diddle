@@ -19,7 +19,9 @@ function correctLetters(words, letters) {
 // exclude all words with any of the  letters
 function presentLetters(words, letters) {
   const literals = new Set();
-  letters.forEach(letter => Object.keys(letter).forEach(ltr => literals.add(`(?=.*${ltr})`)));
+  // extract letter from object and insert it into the regex rule (?=.* )
+  letters.forEach(letter =>
+    Object.keys(letter).forEach(ltr => literals.add(`(?=.*${ltr})`)));
 
   const array = Array.from(literals)
   const rules = new RegExp(array.join(""));
@@ -78,6 +80,11 @@ function duplicateLetters(words, conditions) {
   return Array.from(setOfWords);
 }
 
+function analyzeLetters(words) {
+
+  console.log(words)
+}
+
 // if a grey letter IS ALSO green or yellow, remove it from the list
 // function removeDuplicates(greyLetters, greenLetters, yellowLetters) {
 //   // merge greenLetters & yellowLetters into a set
@@ -101,4 +108,5 @@ export {
   wrongPositions,
   correctLetters,
   duplicateLetters,
+  analyzeLetters,
 };

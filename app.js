@@ -1,42 +1,68 @@
-'use strict';
+"use strict";
 
 import {words} from "./modules/words.js";
 import * as filter from "./modules/filters.js";
 import * as draw from "./modules/draw.js";
-import * as generate from './modules/generators.js';
+// import * as generate from "./modules/generators.js";
+// import * as input from "./modules/interaction.js";
 
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
 
-  draw.generateGrid();
+  // draw the interface
+  draw.squares();
+  draw.keys();
+
+  // INTERACTION ---------------------------------------------------------------
+
+  // word logic
+  const arrayOfChoices = [[]];
+  let index = 1;
+
+  function getCurrentWordArray() {
+    const numberOfWords = arrayOfChoices.length;
+    return arrayOfChoices[numberOfWords - 1];
+  }
+
+  function updateGuessedWords(letter) {
+    const currentWordArr = getCurrentWordArray();
+    (currentWordArr && currentWordArr.length < 5) && currentWordArr.push(letter);
+
+    const availableSpaceEl = document.getElementById(String(index));
+    index = index + 1;
+
+    availableSpaceEl.textContent = letter.toUpperCase();
+  }
+
+  // keyboard interaction
+  const buttons = document.querySelectorAll('.kb-row button');
+  buttons.forEach(button => button.onclick = ({target}) => {
+    const letter = target.getAttribute("data-key");
+    if (letter === 'enter') filter.analyzeLetters(arrayOfChoices);
+    else if (letter === 'del') deleteLastLetter();
+    else updateGuessedWords(letter);
+  });
+
+  function deleteLastLetter() {
+    const currentWordArr = getCurrentWordArray();
+    currentWordArr.pop();
+
+    arrayOfChoices[arrayOfChoices.length - 1] = currentWordArr;
+    const lastLetterEl = document.getElementById(String(index - 1));
+    lastLetterEl.textContent = "";
+    lastLetterEl.className = "square";
+    index = index - 1;
+  }
+
+  // ---------------------------------------------------------------------------
 
   // const absent = document.querySelectorAll('.absent');
   // const correct = document.querySelectorAll('.correct');
   // const present = document.querySelectorAll('.present');
 
-  // const absentSet = ['a', 't', 'i', 'o', 'b', 'l'];
-  // const correctSet = ['r', '.', '.', 'e', '.'];
-  // const presentSet = {'e': 1,};
-  // const duplicates = [{true: 'e'}];
-
-  // const absentSet = ['p', 'l'];
-  // const correctSet = ['.', 'o', '.', '.', 's'];
-  // const presentSet = {};
-  // const duplicates = [{false: 'o'}];
-
-  // const absentSet = ['r', 'i', 'o', 'b', 'l', 'e', 'p', 'h'];
-  // const correctSet = ['.', 'a', 's', 't', 'y'];
-  // const presentSet = [{'t': 2}, {'t': 0}];
-  // const duplicates = [{}];
-
-  const absentSet = ['a', 't', 'o', 'p', 'm', 's', 'n', 'f', 'b'];
-  const correctSet = ['.', 'i', '.', 'e', 'r'];
-  const presentSet = [{'r': 0}, {'i': 3}, {'r': 1}, {'i': 2}, {'e': 4}, {'r':2}];
-  const duplicates = [{}];
-
-  // const invalidLetters = 0;
-  // const validPositions = 0;
-  // const validLetters = 0;
-  // const invalidPositions = 0
+  const absentSet = ['a', 't', 'i', 'o', 'b', 'l'];
+  const correctSet = ['r', '.', '.', 'e', '.'];
+  const presentSet = [{'e': 1},];
+  const duplicates = [{true: 'e'}];
 
   // remove all words containing grey letters
   const first = filter.absentLetters(words, absentSet);
@@ -46,31 +72,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const third = filter.presentLetters(second, presentSet);
   // remove all words that have letters at yellow positions
   const fourth = filter.wrongPositions(third, presentSet);
+  // remove all words that either have, or don't have, duplicates
+  const fifth = filter.duplicateLetters(fourth, duplicates);
 
-  // const fifth = filter.duplicateLetters(fourth, duplicates);
+  console.log(third);
 
-  console.log(fourth);
+  // display suggestions
+  draw.suggestions();
+
+
 });
-
-
-// const indexes = makeArrayOf(30);
-// console.log(indexes);
-
-// const wordsWithLettersAtPositions = words.filter(word => word.charAt(1) === "a");
-// const wordContainingLetters = wordsWithLettersAtPositions.filter(word => word.includes("l"));
-// const letterNotAtPosition = wordContainingLetters.filter(word => word.charAt(4) !== "l");
-// const wordsNotContainLetters = letterNotAtPosition.filter(word => !word.includes("p"));
-//
-// console.log(wordsNotContainLetters);
-
-// const noBadLettersSet = new Set();
-// for (let i = 0; i < noBadLetters.length; i++) {
-//   noBadLettersSet.add(noBadLetters[i]);
-// }
-// const cleaned = Array.from(noBadLettersSet);
-
-
-
-
-
-
