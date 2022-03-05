@@ -48,6 +48,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    -moz-user-select: none;
+    -webkit-user-select: none;
     user-select: none;
     cursor: pointer;
 }
@@ -96,6 +98,8 @@ body {
     margin: .2rem;
     padding: 0;
     text-transform: uppercase;
+    -moz-user-select: none;
+    -webkit-user-select: none;
     user-select: none;
 }
 

@@ -60,24 +60,20 @@ function wrongPositions(words, letters) {
 }
 
 // exclude or include duplicate letters (2 or more) at any position
-function duplicateLetters(words, conditions) {
+function duplicateLetters(words, condition) {
   const setOfWords = new Set();
-  if (conditions) {
-    conditions.forEach((condition) => {
-      const letter = Object.values(condition)[0]; // TODO: refactor this?
-      const boolean = Object.keys(condition)[0]; // TODO: refactor this?
-      const regex = `[${letter}]{2,}`;
-      const rule = new RegExp(regex);
-      if (boolean === 'true') {
-        // if word has more than one instance of condition's value, add to array
-        words.forEach(word => rule.test(word) && setOfWords.add(word));
-      } else {
-        // if word DOES NOT contain more than one instance, add to array;
-        words.forEach(word => !rule.test(word) && setOfWords.add(word));
-      }
-    })
+  if (condition) {
+    const letter = Object.values(condition)[0]; // TODO: refactor this?
+    const boolean = Object.keys(condition)[0]; // TODO: refactor this?
+    const regex = letter + "{2,}";
+    const rule = new RegExp(regex);
+    boolean === 'true' ?
+      // if word has more than one instance of condition's value, add to array
+      words.forEach(word => rule.test(word) && setOfWords.add(word)) :
+      // if word DOES NOT contain more than one instance, add to array;
+      words.forEach(word => !rule.test(word) && setOfWords.add(word))
+    return Array.from(setOfWords);
   }
-  return Array.from(setOfWords);
 }
 
 function analyzeLetters(words) {

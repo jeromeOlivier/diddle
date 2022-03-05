@@ -19,10 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // const correct = document.querySelectorAll('.correct');
   // const present = document.querySelectorAll('.present');
 
-  const absentSet = ['r', 't', 'i', 'o', 'm', 's', 'l'];
-  const correctSet = ['.', '.', '.', 'a', '.'];
-  const presentSet = [{'a': 1}, {'e': 1}];
-  const duplicates = [{}];
+  const absentSet = ['a', 't', 'o', 'm', 's', 'g', 'p', 'd', 'v'];
+  const correctSet = ['b', 'r', 'i', '.', 'e'];
+  const presentSet = [{'r': 0}, {'i': 3}, {'i': 1}, {'e': 3}, {'r': 4}];
+  const duplicate = {'false': 'b'};
 
   // remove all words containing grey letters
   const first = filter.absentLetters(words, absentSet);
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // remove all words that have letters at yellow positions
   const fourth = filter.wrongPositions(third, presentSet);
   // remove all words that either have, or don't have, duplicates
-  const fifth = filter.duplicateLetters(fourth, duplicates);
+  const fifth = filter.duplicateLetters(fourth, duplicate);
 
   console.log(fifth);
 
