@@ -8,11 +8,11 @@ function start() {
   const buttons = document.querySelectorAll('.kb-row button');
   buttons.forEach(button => button.onclick = ({target}) => {
     const letter = target.getAttribute("data-key");
-    if (letter === 'enter') filter.analyzeLetters(arrayOfChoices);
-    else if (letter === 'del') deleteLastLetter();
-    else updateGuessedWords(letter);
+    letter === 'enter' ? filter.analyzeLetters(arrayOfChoices) :
+      letter === 'del' ? deleteLastLetter() : updateGuessedWords(letter);
   });
 
+  // user keyboard interaction
 
 }
 
