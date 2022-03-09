@@ -19,10 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // const correct = document.querySelectorAll('.correct');
   // const present = document.querySelectorAll('.present');
 
-  const absentSet = ['a', 't', 'o', 'm', 's', 'g', 'p', 'd', 'v'];
-  const correctSet = ['b', 'r', 'i', '.', 'e'];
-  const presentSet = [{'r': 0}, {'i': 3}, {'i': 1}, {'e': 3}, {'r': 4}];
-  const duplicate = {'false': 'b'};
+  const absentSet = ['r', 'a', 'i',];
+  const correctSet = ['.', '.', '.', '.', '.'];
+  const presentSet = [{'t': 2}, {'o': 4}];
+  const duplicate = {};
 
   // remove all words containing grey letters
   const first = filter.absentLetters(words, absentSet);

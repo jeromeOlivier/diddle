@@ -6,14 +6,19 @@ let index = 1;
 function start() {
   // onscreen keyboard interaction
   const buttons = document.querySelectorAll('.kb-row button');
-  buttons.forEach(button => button.onclick = ({target}) => {
-    const letter = target.getAttribute("data-key");
-    letter === 'enter' ? filter.analyzeLetters(arrayOfChoices) :
-      letter === 'del' ? deleteLastLetter() : updateGuessedWords(letter);
-  });
+  buttons.forEach(button => button.addEventListener('click', () => {
+    const key = button.getAttribute("data-key");
+    key === 'enter' ? filter.analyzeLetters(arrayOfChoices) :
+      key === 'del' ? deleteLastLetter() : updateGuessedWords(key);
+  }));
 
   // user keyboard interaction
-
+  window.addEventListener('keydown', e => {
+    (e.key >= 'a' && e.key <= 'z') ? updateGuessedWords(e.key) :
+      (e.key === 'Enter') ? filter.analyzeLetters(arrayOfChoices) :
+        (e.key === 'Delete' || e.key === 'Backspace') ? deleteLastLetter() :
+          console.log('illegal input');
+  });
 }
 
 function getCurrentWordArray() {
@@ -34,7 +39,6 @@ function updateGuessedWords(letter) {
 function deleteLastLetter() {
   const currentWordArr = getCurrentWordArray();
   currentWordArr.pop();
-
   arrayOfChoices[arrayOfChoices.length - 1] = currentWordArr;
   const lastLetterEl = document.getElementById(String(index - 1));
   lastLetterEl.textContent = "";

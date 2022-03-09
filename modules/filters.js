@@ -62,9 +62,9 @@ function wrongPositions(words, letters) {
 // exclude or include duplicate letters (2 or more) at any position
 function duplicateLetters(words, condition) {
   const setOfWords = new Set();
-  if (condition) {
-    const letter = Object.values(condition)[0]; // TODO: refactor this?
-    const boolean = Object.keys(condition)[0]; // TODO: refactor this?
+  const letter = Object.values(condition)[0]; // TODO: refactor this?
+  const boolean = Object.keys(condition)[0]; // TODO: refactor this?
+  if (letter) {
     const regex = `[${letter}]{2,}`;
     const rule = new RegExp(regex);
     boolean === 'true' ?
