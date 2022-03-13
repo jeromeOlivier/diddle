@@ -80,8 +80,8 @@ function duplicateLetters(words, condition) {
   }
 }
 
-function analyzeLetters(words) {
-
+function analyzeWord(words) {
+  // return false if submition fails, true if it passes
   console.log(words)
 }
 
@@ -108,5 +108,5 @@ export {
   wrongPositions,
   correctLetters,
   duplicateLetters,
-  analyzeLetters,
+  analyzeWord,
 };

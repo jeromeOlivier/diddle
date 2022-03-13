@@ -1,31 +1,25 @@
 "use strict";
 
-import {words} from "./modules/words.js";
-import * as filter from "./modules/filters.js";
 import * as draw from "./modules/draw.js";
-import * as generate from "./modules/generators.js";
 import * as interaction from "./modules/interaction.js";
+import {dictionary} from "./modules/dictionary.js";
+import * as filter from "./modules/filters.js";
+// import * as generate from "./modules/generators.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-
   // draw the interface
   draw.squares();
-  draw.keys();
-
+  draw.buttons();
   // initialize interactivity
   interaction.start();
-
-  // const absent = document.querySelectorAll('.absent');
-  // const correct = document.querySelectorAll('.correct');
-  // const present = document.querySelectorAll('.present');
-
-  const absentSet = ['r', 'a', 'i',];
-  const correctSet = ['.', '.', '.', '.', '.'];
-  const presentSet = [{'t': 2}, {'o': 4}];
+  // declare all the letter sets for filtering
+  const absentSet = ['r', 'i', 'o', 'l'];
+  const correctSet = ['.', 'a', 't', 'c', 'h'];
+  const presentSet = [];
   const duplicate = {};
 
   // remove all words containing grey letters
-  const first = filter.absentLetters(words, absentSet);
+  const first = filter.absentLetters(dictionary, absentSet);
   // keep only words matching green letters
   const second = filter.correctLetters(first, correctSet);
   // keep only words containing yellow letters
@@ -37,8 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log(fifth);
 
+  /*
   // display suggestions
   draw.suggestions();
-
+   */
 
 });

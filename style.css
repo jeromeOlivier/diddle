@@ -38,6 +38,10 @@ body {
     padding: 1rem;
 }
 
+div[data-sta='blank'],
+div[data-sta='correct'],
+div[data-sta='absent'],
+div[data-sta='present'],
 .square {
     border: 1px solid #444;
     width: 7vh;
@@ -54,15 +58,18 @@ body {
     cursor: pointer;
 }
 
-.green {
+div[data-sta='correct'] {
+    border: 1px solid #3a9c3a;
     background-color: #3a9c3a;
 }
 
-.grey {
+div[data-sta='absent'] {
+    border: 1px solid #3a3838;
     background-color: #3a3838;
 }
 
-.yellow {
+div[data-sta='present'] {
+    border: 1px solid #a6a62b;
     background-color: #a6a62b;
 }
 
@@ -103,26 +110,26 @@ body {
     user-select: none;
 }
 
-button[data-key='single'] {
+button[data-btn-value='single'] {
     background-color: #222;
     border: 2px solid #333;
     width: 10px;
     visibility: hidden;
 }
 
-button[data-key='double'] {
+button[data-btn-value='double'] {
     background-color: #222;
     border: 2px solid #333;
     flex-grow: 30;
     /*visibility: hidden;*/
 }
 
-button[data-key='enter'] {
+button[data-btn-value='Enter'] {
     background-color: #444;
     width: 100px;
 }
 
-button[data-key='del'] {
+button[data-btn-value='Delete'] {
     background-color: #444;
     width: 60px;
 }

@@ -1,12 +1,12 @@
 // to generate
 
 // to generate an array from 1 to 30 === arrayOfNumbers(30);
-function arrayOfNumbers(n, array = []) {
-  if (n === 0) {
+function arrayOfIndexes(n, array = []) {
+  if (n < 0) {
     return array.sort((a, b) => a - b);
   } else {
     array.push(n);
-    return arrayOfNumbers(n - 1, array);
+    return arrayOfIndexes(n - 1, array);
   }
 }
 
@@ -20,7 +20,22 @@ function arrayOfFillers(amount, filler, array = []) {
   }
 }
 
+function incrementBy(number, value) {
+  return number + value;
+}
+
+function next(value) {
+  return value + 1;
+}
+
+function previous(value) {
+  return value - 1;
+}
+
 export {
-  arrayOfNumbers,
+  arrayOfIndexes,
   arrayOfFillers,
+  incrementBy,
+  next,
+  previous,
 }
