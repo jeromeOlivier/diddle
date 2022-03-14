@@ -3,43 +3,61 @@ import * as draw from './draw.js';
 import * as gen from './generators.js'
 
 const words = [];
-const ltr = {'idx': 0, 'ltr': '', 'sta': ''}
 
-function start() {
-  // event listener for user keyboard interaction (keys)
-  window.addEventListener('keydown', e => {
-    const val = e.key;
-    checkEvent(val);
-  });
-
-  // event listener for onscreen keyboard interaction (buttons)
-  const buttons = document.querySelectorAll('.kb-row button');
-  buttons.forEach(button =>
-    button.addEventListener('click', () => {
-      const val = button.getAttribute("data-btn-value");
-      checkEvent(val);
-    }));
-
-  // event listener for current active row of squares
-  const squares = document.querySelector('div.row:last-child').childNodes;
-  squares.forEach(square =>
-    square.addEventListener('click', () => {
-      const content = square.getAttribute("data-ltr");
-      // const status = square.getAttribute("data-sta");
-      if (content !== ' ') {
-        draw.toggleStatus(square);
-      }
-    }))
+// EVENT LISTENERS -------------------------------------------------------------
+// initializer
+export function start() {
+  keyboardEventListener();
+  buttonsEventListener();
+  gridEventListener();
 }
 
-// HELPER FUNCTIONS ------------------------------------------------------------
+// event listener for user keyboard interaction (keys)
+function keyboardEventListener() {
+  window.addEventListener('keydown', e => {
+    const val = e.key;
+    checkKeyboardEvent(val);
+  });
+}
+
+// event listener for onscreen keyboard interaction (buttons)
+function buttonsEventListener() {
+  const buttons = document.querySelectorAll('.kb-row button');
+  buttons.forEach(button => button.addEventListener('click', () => {
+    const val = button.getAttribute("data-btn-value");
+    checkKeyboardEvent(val);
+  }));
+}
+
+// event listener for current active row of squares (always the last)
+function gridEventListener() {
+  const rows = document.querySelectorAll('.row:last-of-type');
+  rows.forEach(row => {
+    const squares = row.querySelectorAll('div');
+    squares.forEach(square => {
+      square.addEventListener('click', () => {
+        checkGridEvent(square);
+      })
+    })
+  });
+}
+
 // check conditions after a key or button event is triggered
-function checkEvent(val) {
+function checkKeyboardEvent(val) {
   if (canAdd(val)) return addLetter(val);
   if (canSubmit(val)) return submitWord();
   if (canDelete(val)) return deleteLetter();
 }
 
+function checkGridEvent(square) {
+  const content = square.getAttribute("data-ltr");
+  const isFilled = content !== ' ';
+  const status = square.parentElement.getAttribute('data-row-sta');
+  const isActive = status === 'active';
+  if (isActive && isFilled) return draw.toggleStatus(square);
+}
+
+// WORD MANIPULATION -----------------------------------------------------------
 function constructWord() {
   const squares = document.querySelector('div.row:last-child').childNodes;
   // copy the statuses of each square to the letter objects of the word
@@ -63,7 +81,7 @@ function constructWord() {
 // add letter to the word and print it to the screen
 function addLetter(letter) {
   // draw letter on screen
-  const index = gen.next(currentIndex());
+  const index = gen.increment(currentIndex());
   const position = `[data-row="${words.length}"] [data-idx="${index}"]`;
   const cell = document.querySelector(position);
   cell.setAttribute('data-ltr', letter);
@@ -74,7 +92,6 @@ function addLetter(letter) {
 function deleteLetter() {
   const index = currentIndex();
   const position = `[data-row="${words.length}"] [data-idx="${index}"]`;
-  console.log(position)
   const cell = document.querySelector(position);
   cell.textContent = "";
   cell.setAttribute('data-ltr', ' ');
@@ -84,15 +101,19 @@ function deleteLetter() {
 // if word is complete, analyze it (returning suggestions) and draw more squares
 function submitWord() {
   const word = constructWord();
+  const row = document.querySelector('div[data-row-sta="active"]');
   if (!containsBlanks(word)) {
-    // process word
     words.push(word);
     filter.analyzeWord(words);
-    // draw a fresh row of squares if there are less than 6
-    if (words.length < 6) draw.squares();
+    row.setAttribute('data-row-sta', 'locked');
+    if (words.length < 6) {
+      draw.squares();
+      gridEventListener();
+    }
   }
 }
 
+// determine current index based on which squares have letters in them
 function currentIndex() {
   let index = undefined;
   const squares = document.querySelector('div.row:last-child').childNodes;
@@ -104,7 +125,7 @@ function currentIndex() {
   return index === undefined ? -1 : index;
 }
 
-// BOOLEANS
+// BOOLEANS --------------------------------------------------------------------
 function canAdd(val) {
   const word = constructWord();
   return val >= 'a' && val <= 'z' && word.length < 5 && words.length < 6;
@@ -123,12 +144,7 @@ function canDelete(val) {
 function containsBlanks(word) {
   const blanks = []
   word.forEach(letter => {
-    console.log(letter.sta);
     if (letter.sta === 'blank') blanks.push(letter)
   });
-  return blanks;
-}
-
-export {
-  start,
+  return blanks.length;
 }

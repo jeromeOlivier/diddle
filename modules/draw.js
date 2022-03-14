@@ -9,8 +9,8 @@ const list = document.querySelector('#words');
 const keyboard = document.querySelector('#keyboard');
 let rowIndex = 0;
 
-function squares() { // draw one row of squares on screen
-  // generate a row, set its attributes and append to the grid div
+// draw one row of squares on screen, set its attributes and append to grid div
+function squares() {
   const row = document.createElement('div');
   row.setAttribute('data-row', `${rowIndex++}`);
   row.setAttribute('data-row-sta', 'active');
@@ -29,16 +29,15 @@ function squares() { // draw one row of squares on screen
 }
 
 function toggleStatus(square) {
-  if (square === 'square') {
+  if (square.getAttribute('data-sta') === 'blank') {
     square.setAttribute('data-sta', 'absent');
   } else if (square.getAttribute('data-sta') === 'absent') {
     square.setAttribute('data-sta', 'present');
   } else if (square.getAttribute('data-sta') === 'present') {
     square.setAttribute('data-sta', 'correct');
   } else {
-    square.setAttribute('data-sta', 'absent');
+    square.setAttribute('data-sta', 'absent')
   }
-
 }
 
 function suggestions() {

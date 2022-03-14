@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // remove all words that either have, or don't have, duplicates
   const fifth = filter.duplicateLetters(fourth, duplicate);
 
-  console.log(fifth);
+  // console.log(fifth);
 
   /*
   // display suggestions

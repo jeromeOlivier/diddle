@@ -24,7 +24,7 @@ function incrementBy(number, value) {
   return number + value;
 }
 
-function next(value) {
+function increment(value) {
   return value + 1;
 }
 
@@ -36,6 +36,6 @@ export {
   arrayOfIndexes,
   arrayOfFillers,
   incrementBy,
-  next,
+  increment,
   previous,
 }

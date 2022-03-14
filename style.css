@@ -41,8 +41,7 @@ body {
 div[data-sta='blank'],
 div[data-sta='correct'],
 div[data-sta='absent'],
-div[data-sta='present'],
-.square {
+div[data-sta='present'] {
     border: 1px solid #444;
     width: 7vh;
     height: 7vh;

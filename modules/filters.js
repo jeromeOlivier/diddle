@@ -81,7 +81,7 @@ function duplicateLetters(words, condition) {
 }
 
 function analyzeWord(words) {
-  // return false if submition fails, true if it passes
+  // return false if submission fails, true if it passes
   console.log(words)
 }
 
