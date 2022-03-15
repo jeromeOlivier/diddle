@@ -2,8 +2,6 @@ import * as filter from './filters.js';
 import * as draw from './draw.js';
 import * as gen from './generators.js'
 
-const words = [];
-
 // EVENT LISTENERS -------------------------------------------------------------
 // initializer
 export function start() {
@@ -45,7 +43,7 @@ function gridEventListener() {
 // check conditions after a key or button event is triggered
 function checkKeyboardEvent(val) {
   if (canAdd(val)) return addLetter(val);
-  if (canSubmit(val)) return submitWord();
+  if (canSubmit(val)) return submitLetters();
   if (canDelete(val)) return deleteLetter();
 }
 
@@ -57,8 +55,48 @@ function checkGridEvent(square) {
   if (isActive && isFilled) return draw.toggleStatus(square);
 }
 
-// WORD MANIPULATION -----------------------------------------------------------
-function constructWord() {
+// MANIPULATION OF LETTERS -----------------------------------------------------
+const letters = [];
+
+// add letter to the word and print it to the screen
+function addLetter(letter) {
+  const index = getIndex();
+  const position = `[data-row="${index.row}"] [data-idx="${index.letter}"]`;
+  console.log(position);
+  const cell = document.querySelector(position);
+  cell.setAttribute('data-ltr', letter);
+  // todo: add animation when letter is added (quick zoom in)
+  cell.textContent = letter.toUpperCase();
+}
+
+// delete letter from the word and remove it from the screen
+function deleteLetter() {
+  // target previous index to delete last letter (current index is always empty)
+  const index = getIndex();
+  const position = `[data-row="${index.row}"] [data-idx="${index.letter - 1}"]`;
+  const cell = document.querySelector(position);
+  cell.textContent = "";
+  cell.setAttribute('data-ltr', ' ');
+  cell.setAttribute('data-sta', 'blank');
+}
+
+// if word is complete, analyze it (returning suggestions) and draw more squares
+function submitLetters() {
+  const letterArray = constructLetters();
+  const row = document.querySelector('div[data-row-sta="active"]');
+  const grid = document.querySelector('#grid')
+  if (!containsBlanks(letterArray)) {
+    letterArray.forEach(letter => letters.push(letter));
+    filter.analyzeWord(letters);
+    row.setAttribute('data-row-sta', 'locked');
+    if (grid.childElementCount < 6) {
+      draw.squares();
+      gridEventListener();
+    }
+  }
+}
+
+function constructLetters() {
   const squares = document.querySelector('div.row:last-child').childNodes;
   // copy the statuses of each square to the letter objects of the word
   const word = [];
@@ -78,69 +116,42 @@ function constructWord() {
   return word;
 }
 
-// add letter to the word and print it to the screen
-function addLetter(letter) {
-  // draw letter on screen
-  const index = gen.increment(currentIndex());
-  const position = `[data-row="${words.length}"] [data-idx="${index}"]`;
-  const cell = document.querySelector(position);
-  cell.setAttribute('data-ltr', letter);
-  cell.textContent = letter.toUpperCase();
-}
-
-// delete letter from the word and remove it from the screen
-function deleteLetter() {
-  const index = currentIndex();
-  const position = `[data-row="${words.length}"] [data-idx="${index}"]`;
-  const cell = document.querySelector(position);
-  cell.textContent = "";
-  cell.setAttribute('data-ltr', ' ');
-  cell.setAttribute('data-sta', 'blank');
-}
-
-// if word is complete, analyze it (returning suggestions) and draw more squares
-function submitWord() {
-  const word = constructWord();
-  const row = document.querySelector('div[data-row-sta="active"]');
-  if (!containsBlanks(word)) {
-    words.push(word);
-    filter.analyzeWord(words);
-    row.setAttribute('data-row-sta', 'locked');
-    if (words.length < 6) {
-      draw.squares();
-      gridEventListener();
-    }
-  }
-}
-
-// determine current index based on which squares have letters in them
-function currentIndex() {
-  let index = undefined;
-  const squares = document.querySelector('div.row:last-child').childNodes;
+function getIndex() {
+  // determine current letter index based on which squares have letters in them
+  let letter;
+  const squares = document.querySelector('div[data-row-sta="active"]').childNodes;
   squares.forEach(square => {
     const idx = Number(square.getAttribute('data-idx'));
-    const letter = square.getAttribute('data-ltr');
-    if (letter !== ' ') index = idx;
+    const ltr = square.getAttribute('data-ltr');
+    // the last filled square === current index
+    if (idx === 0 && ltr === ' ') {
+      letter = 0;
+    } else if (ltr !== ' ') {
+      letter = idx + 1;
+    }
   });
-  return index === undefined ? -1 : index;
+  // determine current row index based on the number of children in #grid div
+  const row = document.querySelector('#grid').childElementCount - 1;
+  return { letter, row };
 }
 
 // BOOLEANS --------------------------------------------------------------------
 function canAdd(val) {
-  const word = constructWord();
-  return val >= 'a' && val <= 'z' && word.length < 5 && words.length < 6;
+  const index = getIndex();
+  return val >= 'a' && val <= 'z' && index.letter < 5 && index.row < 6;
 }
 
 function canSubmit(val) {
-  const word = constructWord();
-  return val === 'Enter' && word.length === 5 && words.length < 6;
+  const index = getIndex();
+  return val === 'Enter' && index.letter === 5 && index.row < 6;
 }
 
 function canDelete(val) {
-  const word = constructWord();
-  return (val === 'Delete' || val === 'Backspace') && word.length > 0;
+  const index = getIndex();
+  return (val === 'Delete' || val === 'Backspace') && index.letter > 0;
 }
 
+// blanks are letters that haven't had their color selected
 function containsBlanks(word) {
   const blanks = []
   word.forEach(letter => {

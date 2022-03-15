@@ -47,7 +47,7 @@ function buttons() {
   const rows = [
     ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '&#9003;'],
     ['1', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', '&#9166;',],
-    ['2', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '2', '2', '2'],
+    ['2', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '2', '2', '2',],
   ];
   rows.forEach(row => {
     const kbRow = document.createElement('div');
@@ -61,9 +61,9 @@ function buttons() {
         btn.setAttribute('data-btn-value', 'Delete');
         btn.innerHTML = b;
       } else if (b === '1') {
-        btn.setAttribute('data-btn-value', 'single');
+        btn.setAttribute('data-btn-value', '1');
       } else if (b === '2') {
-        btn.setAttribute('data-btn-value', 'double');
+        btn.setAttribute('data-btn-value', '2');
       } else {
         btn.setAttribute('data-btn-value', b);
         btn.textContent = b;

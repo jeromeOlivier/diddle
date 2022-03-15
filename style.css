@@ -9,21 +9,18 @@ body {
     font-size: 1rem;
     font-family: "Helvetica", "Arial", sans-serif;
     display: flex;
-    height: 100%;
+    height: 100vh;
     align-items: center;
     flex-direction: column;
 }
 
 #container {
-    /*background-color: red;*/
     display: flex;
     height: 100vh;
     align-items: center;
     justify-content: space-between;
     flex-direction: column;
     width: 100vw;
-    max-width: 500px;
-    min-width: 500px;
 }
 
 .title {
@@ -43,8 +40,8 @@ div[data-sta='correct'],
 div[data-sta='absent'],
 div[data-sta='present'] {
     border: 1px solid #444;
-    width: 7vh;
-    height: 7vh;
+    width: 8vh;
+    height: 8vh;
     margin: .5vh;
     font-size: 2rem;
     font-weight: bold;
@@ -79,29 +76,31 @@ div[data-sta='present'] {
 }
 
 #keyboard {
-    margin: 1rem;
+    margin: .25rem;
+    max-width: 540px;
 }
 
 .kb-row {
     display: flex;
+    max-width: 640px;
     touch-action: manipulation;
 }
 
 .kb-row button {
     align-items: center;
-    background-color: #777;
-    border: 2px solid #888;
-    border-radius: 5px;
+    background-color: #666;
+    border: .3vh solid #888;
+    border-radius: .3rem;
     color: #ddd;
     cursor: pointer;
     display: flex;
     flex-grow: 1;
-    font-size: 1rem;
+    font-size: 1.125rem;
     font-weight: bold;
     height: 50px;
     width: 50px;
     justify-content: center;
-    margin: .2rem;
+    margin: .125rem;
     padding: 0;
     text-transform: uppercase;
     -moz-user-select: none;
@@ -109,18 +108,16 @@ div[data-sta='present'] {
     user-select: none;
 }
 
-button[data-btn-value='single'] {
+button[data-btn-value='1'] {
     background-color: #222;
-    border: 2px solid #333;
-    width: 10px;
+    width: .5vw;
     visibility: hidden;
 }
 
-button[data-btn-value='double'] {
+button[data-btn-value='2'] {
     background-color: #222;
-    border: 2px solid #333;
-    flex-grow: 30;
-    /*visibility: hidden;*/
+    border: .25vh solid #333;
+    width: 50px;
 }
 
 button[data-btn-value='Enter'] {
@@ -130,5 +127,5 @@ button[data-btn-value='Enter'] {
 
 button[data-btn-value='Delete'] {
     background-color: #444;
-    width: 60px;
+    width: 75px;
 }

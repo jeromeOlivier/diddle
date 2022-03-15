@@ -28,7 +28,7 @@ function increment(value) {
   return value + 1;
 }
 
-function previous(value) {
+function decrement(value) {
   return value - 1;
 }
 
@@ -37,5 +37,5 @@ export {
   arrayOfFillers,
   incrementBy,
   increment,
-  previous,
+  decrement,
 }
