@@ -2,18 +2,18 @@
 import * as generate from './generators.js';
 
 function absentLetters(words, letters) {
-  const greySet = new Set();
-  const greyRule = new RegExp("[" + letters.join("") + "]");
-  words.forEach(word => !greyRule.test(word) && greySet.add(word));
-  return Array.from(greySet);
+  const validWords = new Set();
+  const absentRule = new RegExp("[" + letters.join("") + "]");
+  words.forEach(word => !absentRule.test(word) && validWords.add(word));
+  return Array.from(validWords);
 }
 
 // keep only words that have letters at the following positions
 function correctLetters(words, letters) {
-  const goodWords = new Set();
+  const validWords = new Set();
   const regex = new RegExp(letters.join(''));
-  words.forEach(word => regex.test(word) && goodWords.add(word));
-  return Array.from(goodWords);
+  words.forEach(word => regex.test(word) && validWords.add(word));
+  return Array.from(validWords);
 }
 
 // exclude all words with any of the  letters
