@@ -25,7 +25,7 @@ body {
 
 .title {
     display: flex;
-    font-size: 3rem;
+    font-size: 2rem;
     justify-content: center;
     margin: 1rem;
 }
@@ -40,8 +40,8 @@ div[data-sta='correct'],
 div[data-sta='absent'],
 div[data-sta='present'] {
     border: 1px solid #444;
-    width: 8vh;
-    height: 8vh;
+    width: 6vh;
+    height: 6vh;
     margin: .5vh;
     font-size: 2rem;
     font-weight: bold;
@@ -89,16 +89,16 @@ div[data-sta='present'] {
 .kb-row button {
     align-items: center;
     background-color: #666;
-    border: .3vh solid #888;
-    border-radius: .3rem;
+    border: 1px solid #888;
+    border-radius: 5px;
     color: #ddd;
     cursor: pointer;
     display: flex;
     flex-grow: 1;
     font-size: 1.125rem;
     font-weight: bold;
-    height: 50px;
-    width: 50px;
+    height: 40px;
+    width: 40px;
     justify-content: center;
     margin: .125rem;
     padding: 0;

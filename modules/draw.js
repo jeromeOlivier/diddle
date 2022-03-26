@@ -1,5 +1,3 @@
-import * as generate from './generators.js';
-
 // the interface has three main sections
 // the grid holds the squares that display the letters
 const grid = document.querySelector('#grid');
@@ -17,7 +15,7 @@ function squares() {
   row.className = "row";
   grid.appendChild(row);
   // generate an array from 1 to 5
-  const squares = generate.arrayOfIndexes(4);
+  const squares = arrayOfIndexes(4);
   // use the array to generate 5 squares
   squares.forEach(square => {
     const cell = document.createElement('div');
@@ -72,6 +70,17 @@ function buttons() {
     });
     keyboard.appendChild(kbRow)
   });
+}
+
+// HELPER FUNCTIONS ------------------------------------------------------------
+// to generate an array from 1 to 30 === arrayOfNumbers(30);
+function arrayOfIndexes(n, array = []) {
+  if (n < 0) {
+    return array.sort((a, b) => a - b);
+  } else {
+    array.push(n);
+    return arrayOfIndexes(n - 1, array);
+  }
 }
 
 export {

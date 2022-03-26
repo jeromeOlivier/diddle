@@ -1,8 +1,8 @@
 import * as filter from './filters.js';
 import * as draw from './draw.js';
+import * as formula from './formulas.js';
 
 // EVENT LISTENERS -------------------------------------------------------------
-// initializer
 export function start() {
   keyboardEventListener();
   buttonsEventListener();
@@ -46,6 +46,7 @@ function checkKeyboardEvent(val) {
   if (canBeDeleted(val)) return deleteLetter();
 }
 
+// if all conditions pass, square background color can be manipulated
 function checkGridEvent(square) {
   const content = square.getAttribute("data-ltr");
   const isFilled = content !== ' ';
@@ -77,20 +78,19 @@ function deleteLetter() {
 }
 
 // array containing all valid letters
-const letters = [];
+const words = [];
 
 // if word is complete, analyze it (returning suggestions) and draw more squares
 function submitLetters() {
-  // before submitting, construct each letter and check if all squares h
+  // before submitting, construct each letter & check if all squares have
+  // letters
   const lettersFromNextWord = constructLetters();
   if (!containsBlanks(lettersFromNextWord)) {
     // add letters to the final set, removing duplicates
-    lettersFromNextWord.forEach(letter => letters.push(letter));
-    const lettersSet = new Set(letters.map(letter => JSON.stringify(letter)));
-    const tempArray = Array.from(lettersSet);
-    const uniqueLetters = new Set(tempArray.map(letter => JSON.parse(letter)));
+    // lettersFromNextWord.forEach(letter => letters.push(letter));
+    words.push(lettersFromNextWord);
     // send the unique letters to be analyzed and filtered
-    filter.analyzeWord(Array.from(uniqueLetters));
+    formula.parseLetters(words);
     // draw squares & apply an event listener
     const row = document.querySelector('div[data-row-sta="active"]');
     row.setAttribute('data-row-sta', 'locked');

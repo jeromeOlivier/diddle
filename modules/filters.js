@@ -1,6 +1,4 @@
 // remove all words with any of the following letters
-import * as generate from './generators.js';
-
 function absentLetters(words, letters) {
   const validWords = new Set();
   const absentRule = new RegExp("[" + letters.join("") + "]");
@@ -41,7 +39,7 @@ function wrongPositions(words, letters) {
   // generate set of rules
   letters.forEach(letter => {
     Object.keys(letter).forEach(key => {
-      const regex = generate.arrayOfFillers(5, '.');
+      const regex = arrayOfFillers(5, '.');
       regex[letter[key]] = key;
       const rule = new RegExp(regex.join(''));
       rules.add(rule);
@@ -60,10 +58,10 @@ function wrongPositions(words, letters) {
 }
 
 // exclude or include duplicate letters (2 or more) at any position
-function duplicateLetters(words, condition) {
+function duplicateLetters(words, condition) { // todo: function takes an array
   const setOfWords = new Set();
-  const letter = Object.values(condition)[0]; // TODO: refactor this?
-  const boolean = Object.keys(condition)[0]; // TODO: refactor this?
+  const letter = Object.keys(condition)[0];
+  const boolean = Object.values(condition)[0];
   if (letter) {
     const regex = `[${letter}]{2,}`;
     const rule = new RegExp(regex);
@@ -82,25 +80,26 @@ function duplicateLetters(words, condition) {
 
 function analyzeWord(words) {
   // return false if submission fails, true if it passes
-  console.log(words)
+  const rules = new Rules()
+  // console.log(words)
 }
 
 // if a grey letter IS ALSO green or yellow, remove it from the list
-// function removeDuplicates(greyLetters, greenLetters, yellowLetters) {
-//   // merge greenLetters & yellowLetters into a set
-//   const concatenated = Object.from(...greenLetters, ...yellowLetters);
-//   const duplicates = new Set();
-//   duplicates.add(Object.keys(concatenated));
-//
-//   const greySet = new Set(...greyLetters); // remove grey duplicates
-//   const uniqueValues = new Set(); // the set that will be returned
-//
-//   // grey is not a duplicate of either green or yellow? add to uniqueValues
-//   greySet.forEach(letter =>
-//     !letter.has(duplicates) && uniqueValues.add(letter));
-//
-//   return Array.from(uniqueValues);
-// }
+function removeDuplicates(greyLetters, greenLetters, yellowLetters) {
+  // merge greenLetters & yellowLetters into a set
+  const concatenated = Object.from(...greenLetters, ...yellowLetters);
+  const duplicates = new Set();
+  duplicates.add(Object.keys(concatenated));
+
+  const greySet = new Set(...greyLetters); // remove grey duplicates
+  const uniqueValues = new Set(); // the set that will be returned
+
+  // grey is not a duplicate of either green or yellow? add to uniqueValues
+  greySet.forEach(letter =>
+    !letter.has(duplicates) && uniqueValues.add(letter));
+
+  return Array.from(uniqueValues);
+}
 
 export {
   absentLetters,
@@ -110,3 +109,29 @@ export {
   duplicateLetters,
   analyzeWord,
 };
+
+// HELPER FUNCTIONS ------------------------------------------------------------
+// to generate an array of 10 question marks === arrayOfFillers(10, "?");
+function arrayOfFillers(amount, filler, array = []) {
+  if (amount === 0) {
+    return array;
+  } else {
+    array.push(filler);
+    return arrayOfFillers(amount - 1, filler, array);
+  }
+}
+
+// constructor to build Rules object
+function Rules(absentSet, correctSet, presentSet, duplicates) {
+  this.absentSet = absentSet;
+  this.correctSet = correctSet;
+  this.presentSet = presentSet;
+  this.duplicates = duplicates;
+}
+
+/*
+ remove duplicates
+ const lettersSet = new Set(letters.map(letter => JSON.stringify(letter)));
+ const tempArray = Array.from(lettersSet);
+ const uniqueLetters = new Set(tempArray.map(letter => JSON.parse(letter)));
+*/
