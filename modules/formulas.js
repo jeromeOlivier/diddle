@@ -1,26 +1,24 @@
-/** A filter selects words in the dictionary that have a specific formula. A
- *  formula is a list of conditions. The filter uses the formula to return a
- *  list of words from the dictionary.
- */
+import { arrayOfFillers } from './utilities.js'
 
-function parseLetters(words) {
+// A filter selects words in the dictionary that have a specific formula. A
+// formula is a list of conditions. The filter uses the formula to return a
+// list of words from the dictionary.
+
+export function parseLetters(words) {
   // duplicates uses "words" instead of letters since the filter will check if
   // words have, or not, the same letter more than once
-  const duplicates = generateDuplicatesFormula(words);
+  duplicates(words);
   // after duplicates, all other functions just check for letters
   const letters = convertWordsToLetters(words);
   // formula for letters that are in the right spot
-  const correct = generateCorrectFormula(letters);
+  correct(letters);
   // formula for letters that are present in the word
-  const present = generatePresentFormula(letters);
+  present(letters);
   // formula for letters that aren't in the word
-  const absent = generateAbsentFormula(letters);
-
-  return new Formulas(correct, present, absent, duplicates);
+  absent(letters);
 }
-
 // find duplicate letter selections
-function generateDuplicatesFormula(words) {
+const duplicates = function (words) {
   const duplicates = new Set();
   words.forEach(word => {
     const frequencies = {};
@@ -35,19 +33,18 @@ function generateDuplicatesFormula(words) {
       duplicates.add(validateDuplicates(duplicateLetters, word))
     }
   });
-  return duplicates;
+  return Array.from(duplicates);
 }
 
-function generateCorrectFormula(letters) {
+const correct = function (letters) {
   const formula = arrayOfFillers(5, '.');
   const correctLetters = new Set();
   letters.forEach(letter => letter.sta === 'correct' && correctLetters.add(letter));
   correctLetters.forEach(letter => formula[letter.idx] = letter.ltr);
-  console.log(formula)
   return formula;
 }
 
-function generatePresentFormula(letters) {
+const present = function (letters) {
   const formula = new Set();
   const collection = new Set()
   letters.forEach(letter => collection.add(letter));
@@ -58,7 +55,7 @@ function generatePresentFormula(letters) {
   return Array.from(formula);
 }
 
-function generateAbsentFormula(letters) {
+const absent = function generateAbsentFormula(letters) {
   // set of all letters marked absent
   const minuend = new Set();
   letters.forEach(letter => { if (letter.sta === 'absent') minuend.add(letter.ltr) });
@@ -72,12 +69,10 @@ function generateAbsentFormula(letters) {
   return [...minuend].filter(letter => ![...subtrahend].includes(letter));
 }
 
-export {
-  parseLetters, generateCorrectFormula,
+export const answer = new Formulas(correct, present, absent, duplicates);
 
-}
 
-// HELP FUNCTIONS --------------------------------------------------------------
+// PRIVATE FUNCTIONS -----------------------------------------------------------
 // constructor for Formulas
 function Formulas(correctSet, presentSet, absentSet, duplicates) {
   this.correctSet = correctSet;
@@ -118,14 +113,4 @@ function convertWordsToLetters(words) {
   words.forEach(wrd => wrd.forEach(ltr => letters.add(JSON.stringify(ltr))))
   const tempArray = Array.from(letters);
   return new Set(tempArray.map(letter => JSON.parse(letter)));
-}
-
-// to generate an array of 10 question marks === arrayOfFillers(10, "?");
-function arrayOfFillers(amount, filler, array = []) {
-  if (amount === 0) {
-    return array;
-  } else {
-    array.push(filler);
-    return arrayOfFillers(amount - 1, filler, array);
-  }
 }

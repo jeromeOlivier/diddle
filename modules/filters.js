@@ -5,7 +5,6 @@ function absentLetters(words, letters) {
   words.forEach(word => !absentRule.test(word) && validWords.add(word));
   return Array.from(validWords);
 }
-
 // keep only words that have letters at the following positions
 function correctLetters(words, letters) {
   const validWords = new Set();
@@ -13,7 +12,6 @@ function correctLetters(words, letters) {
   words.forEach(word => regex.test(word) && validWords.add(word));
   return Array.from(validWords);
 }
-
 // exclude all words with any of the  letters
 function presentLetters(words, letters) {
   const literals = new Set();
@@ -32,7 +30,6 @@ function presentLetters(words, letters) {
     return words;
   }
 }
-
 // exclude words with yellow letters at position
 function wrongPositions(words, letters) {
   const rules = new Set();
@@ -56,7 +53,6 @@ function wrongPositions(words, letters) {
 
   return Array.from(goodWords);
 }
-
 // exclude or include duplicate letters (2 or more) at any position
 function duplicateLetters(words, condition) { // todo: function takes an array
   const setOfWords = new Set();
@@ -128,10 +124,3 @@ function Rules(absentSet, correctSet, presentSet, duplicates) {
   this.presentSet = presentSet;
   this.duplicates = duplicates;
 }
-
-/*
- remove duplicates
- const lettersSet = new Set(letters.map(letter => JSON.stringify(letter)));
- const tempArray = Array.from(lettersSet);
- const uniqueLetters = new Set(tempArray.map(letter => JSON.parse(letter)));
-*/
