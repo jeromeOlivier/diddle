@@ -4,7 +4,6 @@ import * as draw from "./modules/draw.js";
 import * as game from "./modules/interaction.js";
 import {dictionary} from "./modules/dictionary.js";
 import * as filter from "./modules/filters.js";
-import * as formula from './modules/formulas.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // draw the interface
@@ -34,17 +33,5 @@ document.addEventListener('DOMContentLoaded', () => {
   // display suggestions
   draw.suggestions();
    */
-
-  function triplicate(words) {
-    const string = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
-    const result = [];
-    string.forEach(letter => {
-      const regex = `[${letter}]{3,}`
-      const rule = new RegExp(regex);
-      words.forEach(word => rule.test([...word].sort().join('')) && result.push(word));
-    });
-    return result;
-  }
-
 
 });

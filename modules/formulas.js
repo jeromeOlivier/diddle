@@ -9,7 +9,6 @@ function parseLetters(words) {
   const duplicates = generateDuplicatesFormula(words);
   // after duplicates, all other functions just check for letters
   const letters = convertWordsToLetters(words);
-
   // formula for letters that are in the right spot
   const correct = generateCorrectFormula(letters);
   // formula for letters that are present in the word
@@ -39,22 +38,17 @@ function generateDuplicatesFormula(words) {
   return duplicates;
 }
 
-/** convert the two dimensional array into a one dimentional array and remove
- * duplicates using a set.
- */
-function convertWordsToLetters(words) {
-  const letters = new Set();
-  words.forEach(wrd => wrd.forEach(ltr => letters.add(JSON.stringify(ltr))))
-  const tempArray = Array.from(letters);
-  return new Set(tempArray.map(letter => JSON.parse(letter)));
-}
-
 function generateCorrectFormula(letters) {
-  //
+  const formula = arrayOfFillers(5, '.');
+  const correctLetters = new Set();
+  letters.forEach(letter => letter.sta === 'correct' && correctLetters.add(letter));
+  correctLetters.forEach(letter => formula[letter.idx] = letter.ltr);
+  console.log(formula)
+  return formula;
 }
 
 function generatePresentFormula(letters) {
-  //
+
 }
 
 function generateAbsentFormula(letters) {
@@ -63,6 +57,7 @@ function generateAbsentFormula(letters) {
 
 export {
   parseLetters,
+  generateCorrectFormula,
 
 }
 
@@ -98,3 +93,23 @@ function validateDuplicates(letters, word) {
   });
   return result;
 };
+
+/** convert the two dimensional array into a one dimentional array and remove
+ * duplicates using a set.
+ */
+function convertWordsToLetters(words) {
+  const letters = new Set();
+  words.forEach(wrd => wrd.forEach(ltr => letters.add(JSON.stringify(ltr))))
+  const tempArray = Array.from(letters);
+  return new Set(tempArray.map(letter => JSON.parse(letter)));
+}
+
+// to generate an array of 10 question marks === arrayOfFillers(10, "?");
+function arrayOfFillers(amount, filler, array = []) {
+  if (amount === 0) {
+    return array;
+  } else {
+    array.push(filler);
+    return arrayOfFillers(amount - 1, filler, array);
+  }
+}

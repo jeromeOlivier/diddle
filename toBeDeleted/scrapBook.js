@@ -39,3 +39,14 @@
 //   increment,
 //   decrement,
 // }
+
+// function triplicate(words) {
+//   const string = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+//   const result = [];
+//   string.forEach(letter => {
+//     const regex = `[${letter}]{3,}`
+//     const rule = new RegExp(regex);
+//     words.forEach(word => rule.test([...word].sort().join('')) && result.push(word));
+//   });
+//   return result;
+// }
