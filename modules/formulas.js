@@ -59,12 +59,21 @@ function generatePresentFormula(letters) {
 }
 
 function generateAbsentFormula(letters) {
-  //
+  // set of all letters marked absent
+  const minuend = new Set();
+  letters.forEach(letter => { if (letter.sta === 'absent') minuend.add(letter.ltr) });
+  // set of all other letters
+  const subtrahend = new Set();
+  letters.forEach(letter => {
+    if (letter.sta === 'correct' || letter.sta === 'present') subtrahend.add(letter.ltr);
+  });
+  // letters from subtrahend shouldn't be included since they're present in
+  // the final word, this code removes them and returns an array
+  return [...minuend].filter(letter => ![...subtrahend].includes(letter));
 }
 
 export {
-  parseLetters,
-  generateCorrectFormula,
+  parseLetters, generateCorrectFormula,
 
 }
 
