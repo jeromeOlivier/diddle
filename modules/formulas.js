@@ -48,7 +48,14 @@ function generateCorrectFormula(letters) {
 }
 
 function generatePresentFormula(letters) {
-
+  const formula = new Set();
+  const collection = new Set()
+  letters.forEach(letter => collection.add(letter));
+  collection.forEach(letter => {
+    const entries = new Map([[letter.ltr, letter.idx]]);
+    formula.add(Object.fromEntries(entries));
+  });
+  return Array.from(formula);
 }
 
 function generateAbsentFormula(letters) {
