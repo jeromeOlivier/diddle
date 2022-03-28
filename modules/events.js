@@ -1,4 +1,4 @@
-import {containsBlanks} from './utilities.js';
+import { containsBlanks } from './utilities.js';
 import {
   drawListOfSuggestedWords,
   drawOneLetter,
@@ -22,6 +22,7 @@ export function initiateRowOfSquaresEventListener() {
     })
   });
 }
+
 export function initiateOnScreenKeyboardEventListener() {
   const buttons = document.querySelectorAll('.kb-row button');
   buttons.forEach(button => button.addEventListener('click', () => {
@@ -29,6 +30,7 @@ export function initiateOnScreenKeyboardEventListener() {
     checkKeyboardEvent(val);
   }));
 }
+
 export function initiatePhysicalKeyboardEventListener() {
   window.addEventListener('keydown', e => {
     const val = e.key;
@@ -45,6 +47,7 @@ function checkIfRowOfSquaresIsFilledAndActive(square) {
   const isActive = status === 'active';
   if (isActive && isFilled) return drawSquareColor(square);
 }
+
 function checkKeyboardEvent(val) {
   if (letterCanBeAdded(val)) return drawOneLetter(val);
   if (letterCanBeDeleted(val)) return eraseOneLetter();
@@ -55,10 +58,12 @@ function letterCanBeAdded(val) {
   const index = getIndex();
   return val >= 'a' && val <= 'z' && index.letter < 5 && index.row < 6;
 }
+
 function letterCanBeDeleted(val) {
   const index = getIndex();
   return (val === 'Delete' || val === 'Backspace') && index.letter > 0;
 }
+
 function wordCanBeSubmitted(val) {
   const index = getIndex();
   return val === 'Enter' && index.letter === 5 && index.row < 6;
@@ -83,6 +88,7 @@ function constructLetters() {
   });
   return word;
 }
+
 function submitLetters() {
   // before submitting, construct each letter & check if all squares have
   // letters
@@ -120,5 +126,5 @@ function getIndex() {
   });
   // determine current row index based on the number of children in #grid div
   const row = document.querySelector('#rowsOfSquares').childElementCount - 1;
-  return {letter, row};
+  return { letter, row };
 }

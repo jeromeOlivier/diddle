@@ -1,4 +1,4 @@
-import {arrayOfIndexes} from './utilities.js';
+import { arrayOfIndexes } from './utilities.js';
 
 // the onscreen interface is broken into three sections
 const rowsOfSquaresSection = document.querySelector('#rowsOfSquares');
@@ -9,7 +9,7 @@ let indexForRowsOfSquares = 0;
 
 export function drawOneRowOfSquares() {
   const row = document.createElement('div');
-  row.setAttribute('data-row', `${indexForRowsOfSquares++}`);
+  row.setAttribute('data-row', `${ indexForRowsOfSquares++ }`);
   row.setAttribute('data-row-sta', 'active');
   row.className = "row";
   rowsOfSquaresSection.appendChild(row);
@@ -18,29 +18,32 @@ export function drawOneRowOfSquares() {
   // use the array to generate 5 squares
   squares.forEach(square => {
     const cell = document.createElement('div');
-    cell.setAttribute('data-idx', `${square}`);
+    cell.setAttribute('data-idx', `${ square }`);
     cell.setAttribute('data-ltr', ' ');
     cell.setAttribute('data-sta', 'blank');
     row.appendChild(cell);
   })
 }
+
 export function drawOneLetter(letter) {
   const index = getIndex();
-  const position = `[data-row="${index.row}"] [data-idx="${index.letter}"]`;
+  const position = `[data-row="${ index.row }"] [data-idx="${ index.letter }"]`;
   const cell = document.querySelector(position);
   cell.setAttribute('data-ltr', letter);
   // todo: add animation when letter is added (quick zoom in)
   cell.textContent = letter.toUpperCase();
 }
+
 export function eraseOneLetter() {
   // target previous index to delete last letter (current index is always empty)
   const index = getIndex();
-  const position = `[data-row="${index.row}"] [data-idx="${index.letter - 1}"]`;
+  const position = `[data-row="${ index.row }"] [data-idx="${ index.letter - 1 }"]`;
   const cell = document.querySelector(position);
   cell.textContent = "";
   cell.setAttribute('data-ltr', ' ');
   cell.setAttribute('data-sta', 'blank');
 }
+
 export function drawSquareColor(square) {
   if (square.getAttribute('data-sta') === 'blank') {
     square.setAttribute('data-sta', 'absent');
@@ -56,16 +59,16 @@ export function drawSquareColor(square) {
 export function drawListOfSuggestedWords(words) {
   let list = '';
   words.forEach(word => {
-    list += `${word}\n\n`;
+    list += `${ word }\n\n`;
   });
   listOfWordsSection.innerHTML = list;
 }
 
 export function drawOnScreenKeyboard() {
   const rows = [
-    ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '&#9003;'],
-    ['1', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', '&#9166;',],
-    ['2', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '2', '2', '2',],
+    [ 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '&#9003;' ],
+    [ '1', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', '&#9166;', ],
+    [ '2', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '2', '2', '2', ],
   ];
   rows.forEach(row => {
     const kbRow = document.createElement('div');
@@ -108,5 +111,5 @@ function getIndex() {
   });
   // determine current row index based on the number of children in #grid div
   const row = rowsOfSquaresSection.childElementCount - 1;
-  return {letter, row};
+  return { letter, row };
 }

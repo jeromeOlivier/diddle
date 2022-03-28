@@ -1,5 +1,5 @@
-import {arrayOfFillers} from './utilities.js';
-import {dictionary} from './dictionary.js';
+import { arrayOfFillers } from './utilities.js';
+import { dictionary } from './dictionary.js';
 
 export function runAllFilters(words) {
   // duplicate letters are established using the submitted words
@@ -37,6 +37,7 @@ function generateDuplicateLettersFormula(words) {
   });
   return Array.from(duplicates);
 };
+
 function generateCorrectLettersFormula(letters) {
   const formula = arrayOfFillers(5, '.');
   const correctLetters = new Set();
@@ -44,20 +45,24 @@ function generateCorrectLettersFormula(letters) {
   correctLetters.forEach(letter => formula[letter.idx] = letter.ltr);
   return formula;
 };
+
 function generatePresentLettersFormula(letters) {
   const formula = new Set();
   const collection = new Set()
   letters.forEach(letter => letter.sta === 'present' && collection.add(letter));
   collection.forEach(letter => {
-    const entries = new Map([[letter.ltr, letter.idx]]);
+    const entries = new Map([ [ letter.ltr, letter.idx ] ]);
     formula.add(Object.fromEntries(entries));
   });
   return Array.from(formula);
 };
+
 function generateAbsentLettersFormula(letters) {
   // set of all letters marked absent
   const minuend = new Set();
-  letters.forEach(letter => { if (letter.sta === 'absent') minuend.add(letter.ltr) });
+  letters.forEach(letter => {
+    if (letter.sta === 'absent') minuend.add(letter.ltr)
+  });
   // set of all other letters
   const subtrahend = new Set();
   letters.forEach(letter => {
@@ -65,26 +70,29 @@ function generateAbsentLettersFormula(letters) {
   });
   // letters from subtrahend shouldn't be included since they're present in
   // the final word, this code removes them and returns an array
-  return [...minuend].filter(letter => ![...subtrahend].includes(letter));
+  return [ ...minuend ].filter(letter => ![ ...subtrahend ].includes(letter));
 };
+
 // filters to reduce the dictionary to possible words
-function filterAbsentLetters(dictionary, absentLetters)  {
+function filterAbsentLetters(dictionary, absentLetters) {
   const validWords = new Set();
   const absentRule = new RegExp("[" + absentLetters.join("") + "]");
   dictionary.forEach(word => !absentRule.test(word) && validWords.add(word));
   return Array.from(validWords);
 }
+
 function filterCorrectLetters(words, letters) {
   const validWords = new Set();
   const regex = new RegExp(letters.join(''));
   words.forEach(word => regex.test(word) && validWords.add(word));
   return Array.from(validWords);
 }
+
 function filterPresentLetters(words, letters) {
   const literals = new Set();
   // extract letter from object and insert it into the regex rule (?=.* )
   letters.forEach(letter =>
-    Object.keys(letter).forEach(ltr => literals.add(`(?=.*${ltr})`)));
+    Object.keys(letter).forEach(ltr => literals.add(`(?=.*${ ltr })`)));
   const array = Array.from(literals)
   const rules = new RegExp(array.join(""));
   console.log(rules)
@@ -97,6 +105,7 @@ function filterPresentLetters(words, letters) {
     return words;
   }
 }
+
 function filterWrongPositions(words, letters) {
   const rules = new Set();
   // generate set of rules
@@ -119,25 +128,27 @@ function filterWrongPositions(words, letters) {
 
   return Array.from(goodWords);
 }
+
 function filterDuplicateLetters(words, condition) {
   const setOfWords = new Set();
   const letter = Object.keys(condition)[0];
   const boolean = Object.values(condition)[0];
   if (letter) {
-    const regex = `[${letter}]{2,}`;
+    const regex = `[${ letter }]{2,}`;
     const rule = new RegExp(regex);
     boolean === 'true' ?
       // if word has more than one instance of condition's value, add to array
       words.forEach(word =>
-        rule.test([...word].sort().join('')) && setOfWords.add(word)) :
+        rule.test([ ...word ].sort().join('')) && setOfWords.add(word)) :
       // if word DOES NOT contain more than one instance, add to array;
       words.forEach(word =>
-        (!rule.test([...word].sort().join(''))) && setOfWords.add(word));
+        (!rule.test([ ...word ].sort().join(''))) && setOfWords.add(word));
     return Array.from(setOfWords);
   } else {
     return words;
   }
 }
+
 // additional functions
 function convertWordsToLetters(words) {
   const letters = new Set();
@@ -145,12 +156,14 @@ function convertWordsToLetters(words) {
   const tempArray = Array.from(letters);
   return new Set(tempArray.map(letter => JSON.parse(letter)));
 }
+
 function removePropertiesWithAValueOfOne(obj) {
   for (const key in obj) {
     if (obj[key] === 1) delete obj[key]
   }
   return obj;
 }
+
 function setBooleanValueForDuplicateLetters(letters, word) {
   const result = new Set();
   // store into pairs all objects that contain duplicate letters
@@ -162,7 +175,7 @@ function setBooleanValueForDuplicateLetters(letters, word) {
     // iterate through each object to see if the letter is present or absent
     arrayOfObjects.forEach(obj => truth.add(obj.sta !== 'absent'));
     // build the key value pairs that will be pushed to the set of results
-    const entries = new Map([[arrayOfObjects[0].ltr, !truth.has(false)]]);
+    const entries = new Map([ [ arrayOfObjects[0].ltr, !truth.has(false) ] ]);
     result.add(Object.fromEntries(entries));
   });
   return result;
