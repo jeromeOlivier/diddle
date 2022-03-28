@@ -1,23 +1,23 @@
 // UTILITIES are helper functions that can be used in different modules
 
 // determine current letter index based on which squares have letters in them
-export function getIndex() {
-  let letter;
-  const squares = document.querySelector('div[data-row-sta="active"]').childNodes;
-  squares.forEach(square => {
-    const idx = Number(square.getAttribute('data-idx'));
-    const ltr = square.getAttribute('data-ltr');
-    // the last filled square === current index
-    if (idx === 0 && ltr === ' ') {
-      letter = 0;
-    } else if (ltr !== ' ') {
-      letter = idx + 1;
-    }
-  });
-  // determine current row index based on the number of children in #grid div
-  const row = document.querySelector('#grid').childElementCount - 1;
-  return {letter, row};
-}
+// export function getIndex() {
+//   let letter;
+//   const squares = document.querySelector('div[data-row-sta="active"]').childNodes;
+//   squares.forEach(square => {
+//     const idx = Number(square.getAttribute('data-idx'));
+//     const ltr = square.getAttribute('data-ltr');
+//     // the last filled square === current index
+//     if (idx === 0 && ltr === ' ') {
+//       letter = 0;
+//     } else if (ltr !== ' ') {
+//       letter = idx + 1;
+//     }
+//   });
+//   // determine current row index based on the number of children in #grid div
+//   const row = document.querySelector('#grid').childElementCount - 1;
+//   return {letter, row};
+// }
 
 // to generate an array of 10 question marks === arrayOfFillers(10, "?");
 export function arrayOfFillers(amount, filler, array = []) {

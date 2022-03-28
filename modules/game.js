@@ -3,6 +3,7 @@ import * as e from './events.js';
 
 export function start() {
   i.drawOneRowOfSquares();
+  // i.drawListOfSuggestedWords();
   i.drawOnScreenKeyboard();
   e.initiateRowOfSquaresEventListener();
   e.initiateOnScreenKeyboardEventListener();

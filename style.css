@@ -30,9 +30,16 @@ body {
     margin: 1rem;
 }
 
-#words {
-    height: 500px;
-    padding: 1rem;
+#listOfWords {
+    font-family: monospace;
+    line-height: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    columns: 10px;
+    overflow: scroll;
+    height: 300px;
+    width: 90%;
+    /*margin: 1rem;*/
 }
 
 div[data-sta='blank'],
@@ -40,10 +47,10 @@ div[data-sta='correct'],
 div[data-sta='absent'],
 div[data-sta='present'] {
     border: 1px solid #444;
-    width: 6vh;
-    height: 6vh;
-    margin: .5vh;
-    font-size: 2rem;
+    width: 7.5vh;
+    height: 7.5vh;
+    margin: .25vh;
+    font-size: 1.75rem;
     font-weight: bold;
     display: flex;
     align-items: center;
@@ -55,18 +62,18 @@ div[data-sta='present'] {
 }
 
 div[data-sta='correct'] {
-    border: 1px solid #3a9c3a;
-    background-color: #3a9c3a;
+    border: 1px solid #538d4e;
+    background-color: #538d4e;
 }
 
 div[data-sta='absent'] {
-    border: 1px solid #3a3838;
-    background-color: #3a3838;
+    border: 1px solid #3a3a3c;
+    background-color: #3a3a3c;
 }
 
 div[data-sta='present'] {
-    border: 1px solid #a6a62b;
-    background-color: #a6a62b;
+    border: 1px solid #b59f3b;
+    background-color: #b59f3b;
 }
 
 .row {
@@ -76,8 +83,9 @@ div[data-sta='present'] {
 }
 
 #keyboard {
-    margin: .25rem;
+    margin: 1rem;
     max-width: 540px;
+    padding-top: 1rem;
 }
 
 .kb-row {
@@ -90,17 +98,17 @@ div[data-sta='present'] {
     align-items: center;
     background-color: #666;
     border: 1px solid #888;
-    border-radius: 5px;
+    border-radius: .1rem;
     color: #ddd;
     cursor: pointer;
     display: flex;
     flex-grow: 1;
     font-size: 1.125rem;
     font-weight: bold;
-    height: 40px;
-    width: 40px;
+    height: 2.5rem;
+    width: 2.5rem;
     justify-content: center;
-    margin: .125rem;
+    margin: .1rem;
     padding: 0;
     text-transform: uppercase;
     -moz-user-select: none;

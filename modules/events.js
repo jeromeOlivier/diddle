@@ -1,10 +1,12 @@
-import { containsBlanks, getIndex } from './utilities.js';
-import * as formula from './formulas';
+import {containsBlanks} from './utilities.js';
 import {
+  drawListOfSuggestedWords,
   drawOneLetter,
   drawOneRowOfSquares,
+  drawSquareColor,
   eraseOneLetter
 } from './interface.js';
+import { runAllFilters } from './filters.js';
 
 const words = [];
 
@@ -41,9 +43,8 @@ function checkIfRowOfSquaresIsFilledAndActive(square) {
   const isFilled = content !== ' ';
   const status = square.parentElement.getAttribute('data-row-sta');
   const isActive = status === 'active';
-  if (isActive && isFilled) return draw.drawSquareColor(square);
+  if (isActive && isFilled) return drawSquareColor(square);
 }
-
 function checkKeyboardEvent(val) {
   if (letterCanBeAdded(val)) return drawOneLetter(val);
   if (letterCanBeDeleted(val)) return eraseOneLetter();
@@ -91,14 +92,33 @@ function submitLetters() {
     // lettersFromNextWord.forEach(letter => letters.push(letter));
     words.push(lettersFromNextWord);
     // send the unique letters to be analyzed and filtered
-    formula.parseLetters(words);
+    const listOfWords = runAllFilters(words);
     // draw squares & apply an event listener
     const row = document.querySelector('div[data-row-sta="active"]');
     row.setAttribute('data-row-sta', 'locked');
-    const grid = document.querySelector('#grid')
+    const grid = document.querySelector('#rowsOfSquares')
     if (grid.childElementCount < 6) {
       drawOneRowOfSquares();
       initiateRowOfSquaresEventListener();
+      drawListOfSuggestedWords(listOfWords);
     }
   }
+}
+
+function getIndex() {
+  let letter;
+  const squares = document.querySelector('div[data-row-sta="active"]').childNodes;
+  squares.forEach(square => {
+    const idx = Number(square.getAttribute('data-idx'));
+    const ltr = square.getAttribute('data-ltr');
+    // the last filled square === current index
+    if (idx === 0 && ltr === ' ') {
+      letter = 0;
+    } else if (ltr !== ' ') {
+      letter = idx + 1;
+    }
+  });
+  // determine current row index based on the number of children in #grid div
+  const row = document.querySelector('#rowsOfSquares').childElementCount - 1;
+  return {letter, row};
 }

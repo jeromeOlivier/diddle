@@ -1,26 +1,93 @@
-// remove all words with any of the following letters
-function absentLetters(words, letters) {
+import {arrayOfFillers} from './utilities.js';
+import {dictionary} from './dictionary.js';
+
+export function runAllFilters(words) {
+  // duplicate letters are established using the submitted words
+  const duplicateLetters = generateDuplicateLettersFormula(words);
+  // all other filters need to have the words converted into an list of letters
+  const letters = convertWordsToLetters(words);
+  // generate all of the formulas before running them through the filters
+  const correctLetters = generateCorrectLettersFormula(letters);
+  const presentLetters = generatePresentLettersFormula(letters);
+  const absentLetters = generateAbsentLettersFormula(letters);
+  // with all the formulas generated, run through the filters in sequence,
+  // reducing the list of words with each pass
+  const firstPass = filterAbsentLetters(dictionary, absentLetters);
+  const secondPass = filterCorrectLetters(firstPass, correctLetters);
+  const thirdPass = filterPresentLetters(secondPass, presentLetters);
+  const fourthPass = filterWrongPositions(thirdPass, presentLetters);
+  return filterDuplicateLetters(fourthPass, duplicateLetters);
+}
+
+// formula generators
+function generateDuplicateLettersFormula(words) {
+  const duplicates = new Set();
+  words.forEach(word => {
+    const frequencies = {};
+    // if the letter is new, count of 1, else add one to the count
+    word.forEach(letter => frequencies[letter.ltr] = (frequencies[letter.ltr] || 0) + 1);
+    const aLetterIsRecurrent = removePropertiesWithAValueOfOne(frequencies);
+    // if there are recurrent letters, proceed
+    if (aLetterIsRecurrent) {
+      const duplicateLetters = [];
+      Object.keys(aLetterIsRecurrent).forEach(key => duplicateLetters.push(key));
+      // process the duplicate(s) to see if it is true or false
+      duplicates.add(setBooleanValueForDuplicateLetters(duplicateLetters, word))
+    }
+  });
+  return Array.from(duplicates);
+};
+function generateCorrectLettersFormula(letters) {
+  const formula = arrayOfFillers(5, '.');
+  const correctLetters = new Set();
+  letters.forEach(letter => letter.sta === 'correct' && correctLetters.add(letter));
+  correctLetters.forEach(letter => formula[letter.idx] = letter.ltr);
+  return formula;
+};
+function generatePresentLettersFormula(letters) {
+  const formula = new Set();
+  const collection = new Set()
+  letters.forEach(letter => letter.sta === 'present' && collection.add(letter));
+  collection.forEach(letter => {
+    const entries = new Map([[letter.ltr, letter.idx]]);
+    formula.add(Object.fromEntries(entries));
+  });
+  return Array.from(formula);
+};
+function generateAbsentLettersFormula(letters) {
+  // set of all letters marked absent
+  const minuend = new Set();
+  letters.forEach(letter => { if (letter.sta === 'absent') minuend.add(letter.ltr) });
+  // set of all other letters
+  const subtrahend = new Set();
+  letters.forEach(letter => {
+    if (letter.sta === 'correct' || letter.sta === 'present') subtrahend.add(letter.ltr);
+  });
+  // letters from subtrahend shouldn't be included since they're present in
+  // the final word, this code removes them and returns an array
+  return [...minuend].filter(letter => ![...subtrahend].includes(letter));
+};
+// filters to reduce the dictionary to possible words
+function filterAbsentLetters(dictionary, absentLetters)  {
   const validWords = new Set();
-  const absentRule = new RegExp("[" + letters.join("") + "]");
-  words.forEach(word => !absentRule.test(word) && validWords.add(word));
+  const absentRule = new RegExp("[" + absentLetters.join("") + "]");
+  dictionary.forEach(word => !absentRule.test(word) && validWords.add(word));
   return Array.from(validWords);
 }
-// keep only words that have letters at the following positions
-function correctLetters(words, letters) {
+function filterCorrectLetters(words, letters) {
   const validWords = new Set();
   const regex = new RegExp(letters.join(''));
   words.forEach(word => regex.test(word) && validWords.add(word));
   return Array.from(validWords);
 }
-// exclude all words with any of the  letters
-function presentLetters(words, letters) {
+function filterPresentLetters(words, letters) {
   const literals = new Set();
   // extract letter from object and insert it into the regex rule (?=.* )
   letters.forEach(letter =>
     Object.keys(letter).forEach(ltr => literals.add(`(?=.*${ltr})`)));
-
   const array = Array.from(literals)
   const rules = new RegExp(array.join(""));
+  console.log(rules)
   const newSet = new Set();
 
   if (array.length) {
@@ -30,8 +97,7 @@ function presentLetters(words, letters) {
     return words;
   }
 }
-// exclude words with yellow letters at position
-function wrongPositions(words, letters) {
+function filterWrongPositions(words, letters) {
   const rules = new Set();
   // generate set of rules
   letters.forEach(letter => {
@@ -53,8 +119,7 @@ function wrongPositions(words, letters) {
 
   return Array.from(goodWords);
 }
-// exclude or include duplicate letters (2 or more) at any position
-function duplicateLetters(words, condition) { // todo: function takes an array
+function filterDuplicateLetters(words, condition) {
   const setOfWords = new Set();
   const letter = Object.keys(condition)[0];
   const boolean = Object.values(condition)[0];
@@ -73,54 +138,32 @@ function duplicateLetters(words, condition) { // todo: function takes an array
     return words;
   }
 }
-
-function analyzeWord(words) {
-  // return false if submission fails, true if it passes
-  const rules = new Rules()
-  // console.log(words)
+// additional functions
+function convertWordsToLetters(words) {
+  const letters = new Set();
+  words.forEach(wrd => wrd.forEach(ltr => letters.add(JSON.stringify(ltr))))
+  const tempArray = Array.from(letters);
+  return new Set(tempArray.map(letter => JSON.parse(letter)));
 }
-
-// if a grey letter IS ALSO green or yellow, remove it from the list
-function removeDuplicates(greyLetters, greenLetters, yellowLetters) {
-  // merge greenLetters & yellowLetters into a set
-  const concatenated = Object.from(...greenLetters, ...yellowLetters);
-  const duplicates = new Set();
-  duplicates.add(Object.keys(concatenated));
-
-  const greySet = new Set(...greyLetters); // remove grey duplicates
-  const uniqueValues = new Set(); // the set that will be returned
-
-  // grey is not a duplicate of either green or yellow? add to uniqueValues
-  greySet.forEach(letter =>
-    !letter.has(duplicates) && uniqueValues.add(letter));
-
-  return Array.from(uniqueValues);
-}
-
-export {
-  absentLetters,
-  presentLetters,
-  wrongPositions,
-  correctLetters,
-  duplicateLetters,
-  analyzeWord,
-};
-
-// HELPER FUNCTIONS ------------------------------------------------------------
-// to generate an array of 10 question marks === arrayOfFillers(10, "?");
-function arrayOfFillers(amount, filler, array = []) {
-  if (amount === 0) {
-    return array;
-  } else {
-    array.push(filler);
-    return arrayOfFillers(amount - 1, filler, array);
+function removePropertiesWithAValueOfOne(obj) {
+  for (const key in obj) {
+    if (obj[key] === 1) delete obj[key]
   }
+  return obj;
 }
-
-// constructor to build Rules object
-function Rules(absentSet, correctSet, presentSet, duplicates) {
-  this.absentSet = absentSet;
-  this.correctSet = correctSet;
-  this.presentSet = presentSet;
-  this.duplicates = duplicates;
-}
+function setBooleanValueForDuplicateLetters(letters, word) {
+  const result = new Set();
+  // store into pairs all objects that contain duplicate letters
+  letters.forEach(letter => {
+    // generate an array by filtering in matching letters
+    const arrayOfObjects = word.filter(ltr => ltr.ltr === letter);
+    // collects true and false values
+    const truth = new Set();
+    // iterate through each object to see if the letter is present or absent
+    arrayOfObjects.forEach(obj => truth.add(obj.sta !== 'absent'));
+    // build the key value pairs that will be pushed to the set of results
+    const entries = new Map([[arrayOfObjects[0].ltr, !truth.has(false)]]);
+    result.add(Object.fromEntries(entries));
+  });
+  return result;
+};
