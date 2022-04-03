@@ -1,6 +1,7 @@
 import { arrayOfFillers } from './utilities.js';
 import { dictionary } from './dictionary.js';
 
+// EXECUTIONS ------------------------------------------------------------------
 export function runAllFilters(words) {
   // duplicate letters are established using the submitted words
   const duplicateLetters = generateDuplicateLettersFormula(words);
@@ -19,7 +20,7 @@ export function runAllFilters(words) {
   return filterDuplicateLetters(fourthPass, duplicateLetters);
 }
 
-// formula generators
+// FORMULAS --------------------------------------------------------------------
 function generateDuplicateLettersFormula(words) {
   const duplicates = new Set();
   words.forEach(word => {
@@ -50,10 +51,7 @@ function generatePresentLettersFormula(letters) {
   const formula = new Set();
   const collection = new Set()
   letters.forEach(letter => letter.sta === 'present' && collection.add(letter));
-  collection.forEach(letter => {
-    const entries = new Map([ [ letter.ltr, letter.idx ] ]);
-    formula.add(Object.fromEntries(entries));
-  });
+  collection.forEach(letter => formula.add({[letter.ltr]: letter.idx}));
   return Array.from(formula);
 };
 
@@ -73,7 +71,7 @@ function generateAbsentLettersFormula(letters) {
   return [ ...minuend ].filter(letter => ![ ...subtrahend ].includes(letter));
 };
 
-// filters to reduce the dictionary to possible words
+// FILTERS ---------------------------------------------------------------------
 function filterAbsentLetters(dictionary, absentLetters) {
   const validWords = new Set();
   const absentRule = new RegExp("[" + absentLetters.join("") + "]");
@@ -120,12 +118,9 @@ function filterWrongPositions(words, letters) {
   // compare array of words to set of rules, add matches to array of badWords
   const badWords = new Set();
   words.forEach(word => rules.forEach(rule => rule.test(word) && badWords.add(word)));
-  // words.forEach(word => rules.forEach(rule => rule.test(word) && console.log(word)));
-
-  const goodWords = new Set();
   // if not badWord, add to goodWords
+  const goodWords = new Set();
   words.forEach(word => !badWords.has(word) && goodWords.add(word));
-
   return Array.from(goodWords);
 }
 
@@ -149,7 +144,7 @@ function filterDuplicateLetters(words, condition) {
   }
 }
 
-// additional functions
+// HELPERS ---------------------------------------------------------------------
 function convertWordsToLetters(words) {
   const letters = new Set();
   words.forEach(wrd => wrd.forEach(ltr => letters.add(JSON.stringify(ltr))))

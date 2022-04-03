@@ -1,10 +1,11 @@
 import { arrayOfIndexes } from './utilities.js';
 
-// the onscreen interface is broken into three sections
+// HTML ------------------------------------------------------------------------
 const rowsOfSquaresSection = document.querySelector('#rowsOfSquares');
 const listOfWordsSection = document.querySelector('#listOfWords');
 const onScreenKeyboardSection = document.querySelector('#onScreenKeyboard');
 
+// ELEMENTS --------------------------------------------------------------------
 let indexForRowsOfSquares = 0;
 
 export function drawOneRowOfSquares() {
@@ -44,7 +45,7 @@ export function eraseOneLetter() {
   cell.setAttribute('data-sta', 'blank');
 }
 
-export function drawSquareColor(square) {
+export function drawSquareColor(square) { // toggle between grey, yellow & green
   if (square.getAttribute('data-sta') === 'blank') {
     square.setAttribute('data-sta', 'absent');
   } else if (square.getAttribute('data-sta') === 'absent') {
@@ -58,9 +59,7 @@ export function drawSquareColor(square) {
 
 export function drawListOfSuggestedWords(words) {
   let list = '';
-  words.forEach(word => {
-    list += `${ word }\n\n`;
-  });
+  words.forEach(word => list += `${ word }\n\n`);
   listOfWordsSection.innerHTML = list;
 }
 
@@ -71,31 +70,31 @@ export function drawOnScreenKeyboard() {
     [ '2', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '2', '2', '2', ],
   ];
   rows.forEach(row => {
-    const kbRow = document.createElement('div');
-    kbRow.className = 'kb-row';
-    row.forEach(b => {
+    const rowOfButtons = document.createElement('div');
+    rowOfButtons.className = 'row-of-buttons';
+    row.forEach(button => {
       const btn = document.createElement('button');
-      if (b === '&#9166;') {
+      if (button === '&#9166;') {
         btn.setAttribute('data-btn-value', 'Enter');
-        btn.innerHTML = b;
-      } else if (b === '&#9003;') {
+        btn.innerHTML = button;
+      } else if (button === '&#9003;') {
         btn.setAttribute('data-btn-value', 'Delete');
-        btn.innerHTML = b;
-      } else if (b === '1') {
+        btn.innerHTML = button;
+      } else if (button === '1') {
         btn.setAttribute('data-btn-value', '1');
-      } else if (b === '2') {
+      } else if (button === '2') {
         btn.setAttribute('data-btn-value', '2');
       } else {
-        btn.setAttribute('data-btn-value', b);
-        btn.textContent = b;
+        btn.setAttribute('data-btn-value', button);
+        btn.textContent = button;
       }
-      kbRow.appendChild(btn);
+      rowOfButtons.appendChild(btn);
     });
-    onScreenKeyboardSection.appendChild(kbRow)
+    onScreenKeyboardSection.appendChild(rowOfButtons)
   });
 }
 
-// PRIVATE FUNCTIONS -----------------------------------------------------------
+// HELPERS ---------------------------------------------------------------------
 function getIndex() {
   let letter;
   const squares = document.querySelector('div[data-row-sta="active"]').childNodes;

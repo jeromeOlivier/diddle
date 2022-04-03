@@ -10,7 +10,7 @@ import { runAllFilters } from './filters.js';
 
 const words = [];
 
-// there are three different possible user inputs
+// EVENT LISTENERS -------------------------------------------------------------
 export function initiateRowOfSquaresEventListener() {
   const rows = document.querySelectorAll('.row:last-of-type');
   rows.forEach(row => {
@@ -24,7 +24,7 @@ export function initiateRowOfSquaresEventListener() {
 }
 
 export function initiateOnScreenKeyboardEventListener() {
-  const buttons = document.querySelectorAll('.kb-row button');
+  const buttons = document.querySelectorAll('.row-of-buttons button');
   buttons.forEach(button => button.addEventListener('click', () => {
     const val = button.getAttribute("data-btn-value");
     checkKeyboardEvent(val);
@@ -38,8 +38,7 @@ export function initiatePhysicalKeyboardEventListener() {
   });
 }
 
-// PRIVATE FUNCTIONS -----------------------------------------------------------
-// the following checks if conditions are met before proceeding
+// CONDITIONS ------------------------------------------------------------------
 function checkIfRowOfSquaresIsFilledAndActive(square) {
   const content = square.getAttribute("data-ltr");
   const isFilled = content !== ' ';
@@ -69,6 +68,7 @@ function wordCanBeSubmitted(val) {
   return val === 'Enter' && index.letter === 5 && index.row < 6;
 }
 
+// ACTIONS ---------------------------------------------------------------------
 function constructLetters() {
   const squares = document.querySelector('div.row:last-child').childNodes;
   // copy the statuses of each square to the letter objects of the word
@@ -111,6 +111,7 @@ function submitLetters() {
   }
 }
 
+// HELPER ----------------------------------------------------------------------
 function getIndex() {
   let letter;
   const squares = document.querySelector('div[data-row-sta="active"]').childNodes;
