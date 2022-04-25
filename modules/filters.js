@@ -125,47 +125,50 @@ function filterWrongPositions(words, letters) {
 }
 
 function filterDuplicateLetters(words, conditions) {
-  const setUp = checkSetUp(conditions);
-  console.log(setUp);
-  if (setUp === 'none') return words;
-  const setOfWords = new Set();
-  const secondary = new Set();
-  if (setUp === 'single') {
-    conditions.forEach(condition => {
-      const letter = Object.keys(condition)[0];
-      console.log(letter);
-      const boolean = Object.values(condition)[0];
-      console.log(boolean);
-      const regex = `[${ letter }]{2,}`;
-      const rule = new RegExp(regex);
-      if (boolean === true) {
-        words.forEach(word => rule.test([ ...word ].sort().join('')) && setOfWords.add(word));
-      } else {
-        // if only false, copy all words to set, then remove those that are true
-        words.forEach(word => setOfWords.add(word));
-        words.forEach(word => rule.test([ ...word ].sort().join('')) && setOfWords.delete(word));
-      }
-    });
-    return setOfWords;
+  if (conditions) {
+    const setUp = checkSetUp(conditions);
+    console.log(setUp);
+    if (setUp === 'none') return words;
+    const setOfWords = new Set();
+    const secondary = new Set();
+    if (setUp === 'single') {
+      conditions.forEach(condition => {
+        const letter = Object.keys(condition)[0];
+        console.log(letter);
+        const boolean = Object.values(condition)[0];
+        console.log(boolean);
+        const regex = `[${ letter }]{2,}`;
+        const rule = new RegExp(regex);
+        if (boolean === true) {
+          words.forEach(word => rule.test([ ...word ].sort().join('')) && setOfWords.add(word));
+        } else {
+          // if only false, copy all words to set, then remove those that are true
+          words.forEach(word => setOfWords.add(word));
+          words.forEach(word => rule.test([ ...word ].sort().join('')) && setOfWords.delete(word));
+        }
+      });
+      return setOfWords;
+    }
+    if (setUp === 'mixed') {
+      conditions.forEach(condition => {
+        const letter = Object.keys(condition)[0];
+        const boolean = Object.values(condition)[0];
+        const regex = `[${ letter }]{2,}`;
+        const rule = new RegExp(regex);
+        if (boolean === true) {
+          words.forEach(word =>
+            (rule.test([ ...word ].sort().join(''))) && secondary.add(word));
+        } else {
+          secondary.forEach(word => {
+            (!rule.test([ ...word ].sort().join(''))) && setOfWords.add(word);
+          });
+        }
+        console.log(setOfWords);
+      });
+      return setOfWords;
+    }
   }
-  if (setUp === 'mixed') {
-    conditions.forEach(condition => {
-      const letter = Object.keys(condition)[0];
-      const boolean = Object.values(condition)[0];
-      const regex = `[${ letter }]{2,}`;
-      const rule = new RegExp(regex);
-      if (boolean === true) {
-        words.forEach(word =>
-          (rule.test([ ...word ].sort().join(''))) && secondary.add(word));
-      } else {
-        secondary.forEach(word => {
-          (!rule.test([ ...word ].sort().join(''))) && setOfWords.add(word);
-        });
-      }
-      console.log(setOfWords);
-    });
-    return setOfWords;
-  }
+  return words;
 }
 
 // FORMULA HELPERS -------------------------------------------------------------
@@ -209,18 +212,15 @@ function setBooleanValueForDuplicateLetters(letters, word) {
 }
 
 // FILTER HELPERS --------------------------------------------------------------
-// return any word matching the rule
-function testWords(rule, words) {
-  return words.forEach(word => rule.test([ ...word ].sort().join('')) && word);
-}
-
 // check if booleans are all true, all false, mixed, single, or none
 function checkSetUp(conditions) {
+  console.log(conditions);
   let bools = [];
   if (conditions.length > 1) {
     for (let i = 0; i < conditions.length; i++) {
-      bools.push(Object.values(conditions[i])[0]);
+      bools.push(Object.values(conditions[i]));
     }
+    console.log(bools);
     if (bools[0] !== bools[1]) {
       return 'mixed';
     } else {
@@ -232,32 +232,3 @@ function checkSetUp(conditions) {
     return 'none';
   }
 }
-
-///*
-//  conditions[0].forEach(condition => {
-//  const letter = Object.keys(condition)[0];
-//  const boolean = Object.values(condition)[0];
-//  if (conditions[0] > 1) { // if there is more than one duplicate
-//  if (boolean === 'true') {
-//  // if word has more than one instance of condition's value, add to array
-//  setOfWords.add(testWords(rule, words));
-//  } else {
-//  // if word DOES NOT contain more than one instance, add to array;
-//  setOfWords.forEach(word => (rule.test([ ...word ].sort().join(''))) && setOfWords.delete(word));
-//  }
-//  return Array.from(setOfWords);
-//  }
-//  if (conditions[0] === 1) {
-//  if (boolean === 'true') {
-//  // if only true, add words to set that are true
-//  setOfWords.add(testWords(rule, words));
-//  } else {
-//  // if only false, copy all words to set, then remove those that are true
-//  words.forEach(word => setOfWords.add(word));
-//  setOfWords.delete(testWords(rule, words));
-//  }
-//  }
-//  });
-//  return conditions[0] ? Array.from(setOfWords) : words;
-//  }
-//  */

@@ -8,4 +8,5 @@
   },
   "author": "Jerome Olivier",
   "license": "ISC",
+  "type": "module",
 }
