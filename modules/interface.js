@@ -12,7 +12,7 @@ export function drawOneRowOfSquares() {
   const row = document.createElement('div');
   row.setAttribute('data-row', `${ indexForRowsOfSquares++ }`);
   row.setAttribute('data-row-sta', 'active');
-  row.className = "row";
+  row.className = 'row';
   rowsOfSquaresSection.appendChild(row);
   // generate an array from 1 to 5
   const squares = arrayOfIndexes(4);
@@ -23,7 +23,7 @@ export function drawOneRowOfSquares() {
     cell.setAttribute('data-ltr', ' ');
     cell.setAttribute('data-sta', 'blank');
     row.appendChild(cell);
-  })
+  });
 }
 
 export function drawOneLetter(letter) {
@@ -40,7 +40,7 @@ export function eraseOneLetter() {
   const index = getIndex();
   const position = `[data-row="${ index.row }"] [data-idx="${ index.letter - 1 }"]`;
   const cell = document.querySelector(position);
-  cell.textContent = "";
+  cell.textContent = '';
   cell.setAttribute('data-ltr', ' ');
   cell.setAttribute('data-sta', 'blank');
 }
@@ -53,21 +53,25 @@ export function drawSquareColor(square) { // toggle between grey, yellow & green
   } else if (square.getAttribute('data-sta') === 'present') {
     square.setAttribute('data-sta', 'correct');
   } else {
-    square.setAttribute('data-sta', 'absent')
+    square.setAttribute('data-sta', 'absent');
   }
 }
 
 export function drawListOfSuggestedWords(words) {
   let list = '';
-  words.forEach(word => list += `${ word }\n\n`);
-  listOfWordsSection.innerHTML = list;
+  if (words) {
+    words.forEach(word => list += `${ word }\n\n`);
+    listOfWordsSection.innerHTML = list;
+  } else {
+    listOfWordsSection.innerHTML = 'no words found';
+  }
 }
 
 export function drawOnScreenKeyboard() {
   const rows = [
     [ 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '&#9003;' ],
-    [ '1', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', '&#9166;', ],
-    [ '2', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '2', '2', '2', ],
+    [ '1', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', '&#9166;' ],
+    [ '2', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '2', '2', '2' ],
   ];
   rows.forEach(row => {
     const rowOfButtons = document.createElement('div');
@@ -90,7 +94,7 @@ export function drawOnScreenKeyboard() {
       }
       rowOfButtons.appendChild(btn);
     });
-    onScreenKeyboardSection.appendChild(rowOfButtons)
+    onScreenKeyboardSection.appendChild(rowOfButtons);
   });
 }
 
